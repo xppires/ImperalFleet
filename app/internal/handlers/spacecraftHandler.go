@@ -8,6 +8,7 @@ import (
 	"app/internal/models" 
 	"log/slog"
 	"errors" 
+	"encoding/json"
 )
 type SpacecraftHandlers struct {
 	spacecraftService *services.SpacecraftService 	
@@ -34,8 +35,13 @@ func (s *SpacecraftHandlers) SpacecraftHandleCreate(w http.ResponseWriter, r *ht
 	if err != nil {
 		common.HandleError( w, err, http.StatusBadRequest, "invalid or malformed json")
 	}
+	var craft models.SpacecraftRequest
+	  if err := json.NewDecoder(r.Body).Decode(&craft); err != nil {
+        common.HandleErrorMsg(w, "Invalid input (hnd)", http.StatusBadRequest)
+        return
+    }
 
-	err = s.spacecraftService.Create(reqData)
+	_,err = s.spacecraftService.Create(craft)
 	if err != nil {
 		common.HandleError( w, err, http.StatusInternalServerError, "failed to create entry")
 	}
