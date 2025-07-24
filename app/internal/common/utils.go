@@ -20,7 +20,7 @@ func WriteError(w http.ResponseWriter, status int, err error) {
 	WriteJSON(w, status, map[string]string{"error": err.Error()})
 }
 
-func ReadJSON(r *http.Request, v any) error {
+func ReadJSONSimple(r *http.Request, v any) error {
 	if r.Body == nil {
 		return fmt.Errorf("missing request body")
 	}

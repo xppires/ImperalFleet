@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"app/internal/services"
 	"app/internal/common"
-	"app/internal/models"
-	"app/internal/interfaces"
+	"app/internal/models" 
 	"log/slog"
+	"errors" 
 )
 type SpacecraftHandlers struct {
 	spacecraftService *services.SpacecraftService 	
@@ -20,128 +20,131 @@ func NewSpacecrafHandlers(spacecraftService *services.SpacecraftService, logger 
 }
 
 
-func SpacecraftHandleCreate(service *SpacecraftService) http.HandlerFunc {
+var (
+	errNotFound = errors.New("entry not found")
+)
+
+func (s *SpacecraftHandlers) SpacecraftHandleCreate(w http.ResponseWriter, r *http.Request) {
 	type response struct {
 		success string `json:"success"`
 	}
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		reqData, err := common.ReadJSON[SpacecraftRequest](r)
-		if err != nil {
-			common.HandleError( w, err, http.StatusBadRequest, "invalid or malformed json")
-		}
 
-		err = service.repo.Create(ctx, reqData)
-		if err != nil {
-			common.HandleError( w, err, http.StatusInternalServerError, "failed to create entry")
-		}
 
-		if err := common.WriteJSON(w, r, http.StatusCreated, response{success: "true"}); err != nil {
-			common.HandleError( w, err, http.StatusInternalServerError, "failed to provide response")
-		}
+	reqData, err := common.ReadJSON[models.SpacecraftRequest](r)
+	if err != nil {
+		common.HandleError( w, err, http.StatusBadRequest, "invalid or malformed json")
 	}
+
+	err = s.spacecraftService.Create(reqData)
+	if err != nil {
+		common.HandleError( w, err, http.StatusInternalServerError, "failed to create entry")
+	}
+
+	if err := common.WriteJSON(w, http.StatusCreated, response{success: "true"}); err != nil {
+		common.HandleError( w, err, http.StatusInternalServerError, "failed to provide response")
+	}
+	
 }
 
-func SpacecraftHandleUpdate(service *SpacecraftService) http.HandlerFunc {
+func (s *SpacecraftHandlers) SpacecraftHandleUpdate(w http.ResponseWriter, r *http.Request) {
 	type response struct {
 		success string `json:"success"`
 	}
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
+	
 
-		id, err := strconv.Atoi(r.PathValue("id"))
-		if err != nil {
-			common.HandleError( w, err, http.StatusBadRequest, "invalid spaceship id")
-		}
 
-		reqData, err := common.ReadJSON[SpacecraftRequest](r)
-		if err != nil {
-			common.HandleError( w, err, http.StatusBadRequest, "invalid or malformed json")
-		}
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		common.HandleError( w, err, http.StatusBadRequest, "invalid spaceship id")
+	}
 
-		err = service.repo.Update(ctx, id, reqData)
-		if err != nil {
-			switch err {
-			case errNotFound:
-				common.HandleError( w, err, http.StatusNotFound, "entry not found")
-			default:
-				common.HandleError( w, err, http.StatusInternalServerError, "failed to update entry")
-			}
-		}
+	reqData, err := common.ReadJSON[models.SpacecraftRequest](r)
+	if err != nil {
+		common.HandleError( w, err, http.StatusBadRequest, "invalid or malformed json")
+	}
 
-		if err := common.WriteJSON(w, r, http.StatusCreated, response{success: "true"}); err != nil {
-			common.HandleError( w, err, http.StatusInternalServerError, "failed to provide response")
+	err = s.spacecraftService.Update(id, reqData)
+	if err != nil {
+		switch err {
+		case errNotFound:
+			common.HandleError( w, err, http.StatusNotFound, "entry not found")
+		default:
+			common.HandleError( w, err, http.StatusInternalServerError, "failed to update entry")
 		}
 	}
+
+	if err := common.WriteJSON(w, http.StatusCreated, response{success: "true"}); err != nil {
+		common.HandleError( w, err, http.StatusInternalServerError, "failed to provide response")
+	}
+	
 }
 
-func SpacecraftHandleDelete(service *SpacecraftService) http.HandlerFunc {
+func (s *SpacecraftHandlers) SpacecraftHandleDelete(w http.ResponseWriter, r *http.Request) {
 	type response struct {
 		success string `json:"success"`
 	}
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
+	
 
-		id, err := strconv.Atoi(r.PathValue("id"))
-		if err != nil {
-			common.HandleError( w, err, http.StatusBadRequest, "invalid spaceship id")
-		}
 
-		err = service.repo.Delete(ctx, id)
-		if err != nil {
-			switch err {
-			case errNotFound:
-				common.HandleError( w, err, http.StatusNotFound, "entry not found")
-			default:
-				common.HandleError( w, err, http.StatusInternalServerError, "failed to delete entry")
-			}
-		}
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		common.HandleError( w, err, http.StatusBadRequest, "invalid spaceship id")
+	}
 
-		if err := common.WriteJSON(w, r, http.StatusCreated, response{success: "true"}); err != nil {
-			common.HandleError( w, err, http.StatusInternalServerError, "failed to provide response")
+	err = s.spacecraftService.Delete(id)
+	if err != nil {
+		switch err {
+		case errNotFound:
+			common.HandleError( w, err, http.StatusNotFound, "entry not found")
+		default:
+			common.HandleError( w, err, http.StatusInternalServerError, "failed to delete entry")
 		}
 	}
+
+	if err := common.WriteJSON(w, http.StatusCreated, response{success: "true"}); err != nil {
+		common.HandleError( w, err, http.StatusInternalServerError, "failed to provide response")
+	}
+
 }
 
-func SpacecraftHandleGetByID(service *SpacecraftService) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
+func (s *SpacecraftHandlers) SpacecraftHandleGetByID(w http.ResponseWriter, r *http.Request) {
+	
 
-		id, err := strconv.Atoi(r.PathValue("id"))
-		if err != nil {
-			common.HandleError( w, err, http.StatusBadRequest, "invalid id")
-		}
 
-		spacecraft, err := service.repo.GetByID(ctx, id)
-		if err != nil {
-			switch err {
-			case errNotFound:
-				common.HandleError( w, err, http.StatusNotFound, "entry not found")
-			default:
-				common.HandleError( w, err, http.StatusInternalServerError, "failed to retrieve entry")
-			}
-		}
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		common.HandleError( w, err, http.StatusBadRequest, "invalid id")
+	}
 
-		if err := common.WriteJSON(w, r, http.StatusOK, spacecraft); err != nil {
-			common.HandleError( w, err, http.StatusInternalServerError, "failed to produce response")
+	spacecraft, err := s.spacecraftService.GetByID(id)
+	if err != nil {
+		switch err {
+		case errNotFound:
+			common.HandleError( w, err, http.StatusNotFound, "entry not found")
+		default:
+			common.HandleError( w, err, http.StatusInternalServerError, "failed to retrieve entry")
 		}
 	}
+
+	if err := common.WriteJSON(w, http.StatusOK, spacecraft); err != nil {
+		common.HandleError( w, err, http.StatusInternalServerError, "failed to produce response")
+	}
+	
 }
 
 // filter by name, class, status
-func SpacecraftHandleGet(service *SpacecraftService) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
+func (s *SpacecraftHandlers) SpacecraftHandleGet(w http.ResponseWriter, r *http.Request) {
+	
 
-		filters := r.URL.Query()
+	filters := r.URL.Query()
 
-		spacecrafts, err := service.repo.Get(ctx, filters)
-		if err != nil {
-			common.HandleError( w, err, http.StatusInternalServerError, "failed to retrieve spaceships")
-		}
-
-		if err := common.WriteJSON(w, r, http.StatusOK, spacecrafts); err != nil {
-			common.HandleError( w, err, http.StatusInternalServerError, "failed to produce response")
-		}
+	spacecrafts, err := s.spacecraftService.Get(filters)
+	if err != nil {
+		common.HandleError( w, err, http.StatusInternalServerError, "failed to retrieve spaceships")
 	}
+
+	if err := common.WriteJSON(w, http.StatusOK, spacecrafts); err != nil {
+		common.HandleError( w, err, http.StatusInternalServerError, "failed to produce response")
+	}
+
 }

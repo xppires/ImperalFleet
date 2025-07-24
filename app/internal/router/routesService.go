@@ -5,18 +5,17 @@ import (
 	"net/http" 
     "github.com/gorilla/mux"
 
-    "app/internal/interfaces" 
+    "app/internal/interfaces"  
 	"app/internal/handlers"
-	"app/internal/services"
 
  
 )
 
-func InitRouter(spacecraftHandler *spacecraftHandlers, logger interfaces.Logger) *http.ServeMux {
+func InitRouter(spacecraftHandler *handlers.SpacecraftHandlers, logger interfaces.Logger)  {
  	rtr:= mux.NewRouter()
 
-	rtr.HandleFunc("/v1/spacecrafts", spacecraftHandler.GetAll).Methods(http.MethodGet)
-	rtr.HandleFunc("/v1/spacecrafts/{id}",spacecraftHandler.GetByID).Methods(http.MethodGet)
+	rtr.HandleFunc("/v1/spacecrafts", spacecraftHandler.SpacecraftHandleGet).Methods(http.MethodGet)
+	rtr.HandleFunc("/v1/spacecrafts/{id}",spacecraftHandler.SpacecraftHandleGetByID).Methods(http.MethodGet)
 	// rtr.HandleFunc("/v1/spacecrafts", spacecraftHandler.c).Methods(http.MethodPost)
 	// rtr.HandleFunc("/v1/spacecrafts/", spacecraftHandler(repo, logger))
 	// rtr.HandleFunc("/v1/spacecrafts/", spacecraftHandler(repo, logger))

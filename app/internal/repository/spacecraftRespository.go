@@ -1,11 +1,10 @@
 package repository
 
-import (
-	"context" 
+import ( 
 	"errors" 
 	"app/internal/models"
 	"app/internal/interfaces"
-	"fmt"
+	"fmt" 
 	
 )
 
@@ -24,22 +23,24 @@ func NewSpacecraftRepository(conn interfaces.DBStore) *SpacecraftRepository {
 }
 
 // Create an entry for a new spaceship.
-func (r *SpacecraftRepository) Create(ctx context.Context, craft models.SpacecraftRequest) error {
-	 return fmt.Errorf("not implemented")
+func (r *SpacecraftRepository) Create( craft *models.SpacecraftRequest) (int, error) {
+
+	 return 0, fmt.Errorf("not implemented")
 }
 
-func (r *SpacecraftRepository) Update(ctx context.Context, id int, craft models.SpacecraftRequest) error {
+func (r *SpacecraftRepository) Update( id int, craft *models.SpacecraftRequest) error {
   return fmt.Errorf("not implemented")
 }
-func (r *SpacecraftRepository) Delete(ctx context.Context, id int) error {
+func (r *SpacecraftRepository) Delete( id int) error {
 	  return fmt.Errorf("not implemented")
 }
-func (r *SpacecraftRepository) GetByID(ctx context.Context, id int) (models.Spacecraft, error) {
+func (r *SpacecraftRepository) GetByID( id int,filter *string) (models.Spacecraft, error) {
 	var spacecraft models.Spacecraft
 	  return spacecraft, fmt.Errorf("not implemented")
 }
 
-// func (r *SpacecraftRepository) Get(ctx context.Context, filters url.Values) ([]models.Spacecraft, error) {
-// 	 return [], fmt.Errorf("not implemented")
+func (r *SpacecraftRepository) Get( filters *string) ([]models.Spacecraft, error) {
+	list := []models.Spacecraft{}
+	return list, fmt.Errorf("not implemented")
 	 
-// }
+}
