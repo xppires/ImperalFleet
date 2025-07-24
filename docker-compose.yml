@@ -1,0 +1,37 @@
+#version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: taskdb
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    restart: always
+     
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+   
+  app:
+    build:  ./app
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: taskdb
+      MYSQL_HOST: mysql 
+      APP_SECRET: "abc&1*~#^2^#s0^=)^^7%b34"
+      GLOBAL_RATE: 10
+      GLOBAL_RATE_BURSTS: 10
+    depends_on:
+      mysql:
+        condition: service_healthy 
+    ports:
+      - "8080:8080"
+ 
