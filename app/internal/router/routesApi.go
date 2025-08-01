@@ -4,18 +4,26 @@ import (
 	"log"
 	"net/http" 
     "github.com/gorilla/mux"
-
+	"app/internal/middleware"
     "app/internal/interfaces"  
 	"app/internal/handlers"
 
  
 )
 
-func InitRouter(spacecraftHandler *handlers.SpacecraftHandlers, logger interfaces.Logger)  {
- 	rtr:= mux.NewRouter()
+func InitRouter(spacecraftHandler *handlers.SpacecraftHandlers, RateLimite interfaces.RateLimiter, logger interfaces.Logger)  {
+ 	
+	gr := middleware.NewGobalRateMiddleWare(RateLimite)
+	rtr:= mux.NewRouter()
+	rtr.Use(gr.RateLimitMiddleware)
+    rtr.Use(middleware.CORSMiddleware)
 
-	rtr.HandleFunc("/v1/spacecrafts", spacecraftHandler.SpacecraftHandleGet).Methods(http.MethodGet)
-	rtr.HandleFunc("/v1/spacecrafts/{id}",spacecraftHandler.SpacecraftHandleGetByID).Methods(http.MethodGet)
+	craftRoutes := rtr.Methods(http.MethodGet, http.MethodDelete).Subrouter() 
+    craftRoutes.Use(middleware.AuthMiddleware )
+
+
+	craftRoutes.HandleFunc("/v1/spacecrafts", spacecraftHandler.SpacecraftHandleGet).Methods(http.MethodGet)
+	craftRoutes.HandleFunc("/v1/spacecrafts/{id}",spacecraftHandler.SpacecraftHandleGetByID).Methods(http.MethodGet)
 	// rtr.HandleFunc("/v1/spacecrafts", spacecraftHandler.c).Methods(http.MethodPost)
 	// rtr.HandleFunc("/v1/spacecrafts/", spacecraftHandler(repo, logger))
 	// rtr.HandleFunc("/v1/spacecrafts/", spacecraftHandler(repo, logger))

@@ -1,4 +1,4 @@
-package middleware
+package models
 
 // User represents a user in the system
 // It contains fields for ID, username, password, email, and role.

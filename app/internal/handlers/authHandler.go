@@ -1,11 +1,11 @@
-package middleware
+package handlers
 
 import (
     "app/internal/common"
+	"app/internal/models"
 	"net/http" 
 	"log"
 	"encoding/json" 
-	"context"
 )
 // authenticate handles the user authentication.
 // It expects a JSON body with username and password.
@@ -13,7 +13,7 @@ import (
 // If the credentials are invalid, it returns an unauthorized status.
 func Authenticate(w http.ResponseWriter, r *http.Request) {
 	
-	var user User
+	var user models.User
 	 if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
         http.Error(w, "Invalid user input", http.StatusBadRequest)
         return
@@ -47,21 +47,3 @@ func Authenticate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// authMiddleware is a middleware that checks for the JWT token in the Authorization header
-// It verifies the token and extracts userId and role from the claims.
-func AuthMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		name,role, err := common.ExtractUserFromJWT(w,r)
-		if err != nil {
-			common.HandleErrorSimple(w, err, http.StatusUnauthorized)
-			return
-		}
-		
-		ctx := r.Context()
-		ctx = context.WithValue(ctx,"userId", name)
-		ctx = context.WithValue(ctx,"Role", role)
-
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
-}
