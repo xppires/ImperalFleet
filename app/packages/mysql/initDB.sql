@@ -44,3 +44,18 @@ INSERT IGNORE INTO armaments (spaceship_id, title, qty) VALUES
 -- Insert sample imperial officer (password: "empire123")
 INSERT IGNORE INTO imperial_officers (username, password_hash, rank) VALUES
 ('r3d3', '$2a$10$rZ3Q8ZKvyQn9h5YqT6mJbeXgJH8fJ2m3rK9Q2vC8xH7wJ4pL5nM6a', 'General');
+
+
+INSERT INTO `spaceships` (`name`, `class`, `crew`, `image`, `value`, `status`, `created_at`, `updated_at`)
+VALUES
+	('sp1', 'xd', 0, 'url', 3.00, 'operational', '2025-07-28 16:40:34', '2025-07-30 22:12:27'),
+	('sp2', 'xd', 0, 'url', 43.00, 'operational', '2025-07-28 16:40:34', '2025-07-30 22:12:31');
+
+INSERT INTO `armaments` (`spaceship_id`, `title`, `qty`)
+VALUES
+	(1, 'arm title', 2),
+	(1, 'arm2 ', 1),
+	(2, 'xdf', 2),
+	(2, 'arm1', 1),
+	(2, 'sss', 0);
+
