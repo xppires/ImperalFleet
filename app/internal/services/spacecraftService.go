@@ -11,10 +11,10 @@ import (
 
 
 type SpacecraftService struct {
-	SpacecraftRepo  *repository.SpacecraftRepository 
+	SpacecraftRepo  repository.SpacecraftRepository 
 }
 
-func NewSpacecraftService(spacecraftkRepo *repository.SpacecraftRepository ) *SpacecraftService {
+func NewSpacecraftService(spacecraftkRepo repository.SpacecraftRepository ) *SpacecraftService {
  
 	return &SpacecraftService{
 		SpacecraftRepo:  spacecraftkRepo , 

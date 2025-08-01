@@ -22,10 +22,10 @@ services:
   app:
     build:  ./app
     environment:
-      MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: imperial_fleet
-      MYSQL_HOST: mysql 
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_DATABASE: imperial_fleet
+      DB_HOST: mysql 
       APP_SECRET: "abc&1*~#^2^#s0^=)^^7%b34"
       GLOBAL_RATE: 10
       GLOBAL_RATE_BURSTS: 10

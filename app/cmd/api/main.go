@@ -11,10 +11,16 @@ import (
 func main() {
     
     lg := config.InitLogger()
-    db := config.InitMysql()
+    db, dbConfig := config.InitDB()
 
     // repositories
-    spacecraftRepo := repository.NewSpacecraftRepository(db)
+    var spacecraftRepo repository.SpacecraftRepository
+    switch dbConfig.Driver {
+    case "postgres":
+        spacecraftRepo = repository.NewSpacecraftRepositoryPosrtgresql(db)
+    case "mysql":
+        spacecraftRepo = repository.NewSpacecraftRepositoryMysql(db) 
+    }
 
     // services
     spacecraftService := services.NewSpacecraftService(spacecraftRepo)
