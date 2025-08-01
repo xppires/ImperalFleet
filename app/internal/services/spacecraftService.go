@@ -4,6 +4,7 @@ package services
 import (
 	"app/internal/repository"
 	"app/internal/models"
+	"context"
 
 )
 
@@ -26,8 +27,8 @@ func (s *SpacecraftService) Create(Spacecraft *models.SpacecraftRequest) (int, e
 	return  SpacecraftID, err
 }
 
-func (s *SpacecraftService) Get(filter *string) ( [] models.Spacecraft, error) {
-	return s.SpacecraftRepo.Get(filter)
+func (s *SpacecraftService) Get(ctx context.Context, filter *map[string][]string) ( [] models.Spacecraft, error) {
+	return s.SpacecraftRepo.Get(ctx,filter)
 }
 
 func (s *SpacecraftService) Delete(SpacecraftID int) (  error) {

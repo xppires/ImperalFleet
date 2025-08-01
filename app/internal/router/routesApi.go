@@ -20,6 +20,7 @@ func InitRouter(spacecraftHandler *handlers.SpacecraftHandlers, logger interface
 	// rtr.HandleFunc("/v1/spacecrafts/", spacecraftHandler(repo, logger))
 	// rtr.HandleFunc("/v1/spacecrafts/", spacecraftHandler(repo, logger))
 
+	http.Handle("/", rtr) 
 	logger.Info("Router initialized successfully on :8080")
     // log.Println("Server running on :8080")
     log.Fatal(http.ListenAndServe(":8080", nil))

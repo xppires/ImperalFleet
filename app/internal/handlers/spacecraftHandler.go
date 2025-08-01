@@ -5,16 +5,16 @@ import (
 	"strconv"
 	"app/internal/services"
 	"app/internal/common"
-	"app/internal/models" 
-	"log/slog"
+	"app/internal/models"  
 	"errors" 
 	"encoding/json"
+	"log"
 )
 type SpacecraftHandlers struct {
 	spacecraftService *services.SpacecraftService 	
 }
 
-func NewSpacecrafHandlers(spacecraftService *services.SpacecraftService, logger *slog.Logger) *SpacecraftHandlers {
+func NewSpacecrafHandlers(spacecraftService *services.SpacecraftService) *SpacecraftHandlers {
 	return &SpacecraftHandlers{
 		spacecraftService: spacecraftService, 
 	}
@@ -31,11 +31,11 @@ func (s *SpacecraftHandlers) SpacecraftHandleCreate(w http.ResponseWriter, r *ht
 	}
 
 
-	reqData, err := common.ReadJSON[models.SpacecraftRequest](r)
+	_, err := common.ReadJSON[models.SpacecraftRequest](r)
 	if err != nil {
 		common.HandleError( w, err, http.StatusBadRequest, "invalid or malformed json")
 	}
-	var craft models.SpacecraftRequest
+	var craft *models.SpacecraftRequest
 	  if err := json.NewDecoder(r.Body).Decode(&craft); err != nil {
         common.HandleErrorMsg(w, "Invalid input (hnd)", http.StatusBadRequest)
         return
@@ -64,12 +64,16 @@ func (s *SpacecraftHandlers) SpacecraftHandleUpdate(w http.ResponseWriter, r *ht
 		common.HandleError( w, err, http.StatusBadRequest, "invalid spaceship id")
 	}
 
-	reqData, err := common.ReadJSON[models.SpacecraftRequest](r)
-	if err != nil {
-		common.HandleError( w, err, http.StatusBadRequest, "invalid or malformed json")
+	// reqData, err := common.ReadJSON[models.SpacecraftRequest](r)
+	// if err != nil {
+	// 	common.HandleError( w, err, http.StatusBadRequest, "invalid or malformed json")
+	// }
+	var craft *models.SpacecraftRequest
+	if err := json.NewDecoder(r.Body).Decode(&craft); err != nil {
+		common.HandleErrorMsg(w, "Invalid input (hnd)", http.StatusBadRequest)
+		return
 	}
-
-	err = s.spacecraftService.Update(id, reqData)
+	err = s.spacecraftService.Update(id, craft)
 	if err != nil {
 		switch err {
 		case errNotFound:
@@ -122,7 +126,7 @@ func (s *SpacecraftHandlers) SpacecraftHandleGetByID(w http.ResponseWriter, r *h
 		common.HandleError( w, err, http.StatusBadRequest, "invalid id")
 	}
 
-	spacecraft, err := s.spacecraftService.GetByID(id)
+	spacecraft, err := s.spacecraftService.GetByID(id, nil)
 	if err != nil {
 		switch err {
 		case errNotFound:
@@ -141,12 +145,21 @@ func (s *SpacecraftHandlers) SpacecraftHandleGetByID(w http.ResponseWriter, r *h
 // filter by name, class, status
 func (s *SpacecraftHandlers) SpacecraftHandleGet(w http.ResponseWriter, r *http.Request) {
 	
+	log.Println("SpacecraftHandleGet called")
+	q := r.URL.Query()
+	values := make(map[string][]string)
+	for key, value := range q {
+		values[key] = value
+	}
+	// if len(values) == 0 {
+	// 	common.HandleErrorMsg(w, "No filters provided", http.StatusBadRequest)
+	// 	return
+	// }	
+	ctx := r.Context()		
 
-	filters := r.URL.Query()
-
-	spacecrafts, err := s.spacecraftService.Get(filters)
+	spacecrafts, err := s.spacecraftService.Get(ctx,&values)
 	if err != nil {
-		common.HandleError( w, err, http.StatusInternalServerError, "failed to retrieve spaceships")
+		common.HandleError( w, err.Error(), http.StatusInternalServerError, "failed to retrieve spaceships")
 	}
 
 	if err := common.WriteJSON(w, http.StatusOK, spacecrafts); err != nil {
