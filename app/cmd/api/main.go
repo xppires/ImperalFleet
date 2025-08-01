@@ -12,6 +12,7 @@ func main() {
     
     lg := config.InitLogger()
     db, dbConfig := config.InitDB()
+    rt := config.InitGlobalLimitRate()
 
     // repositories
     var spacecraftRepo repository.SpacecraftRepository
@@ -28,5 +29,5 @@ func main() {
     spacecraftHandlers := handlers.NewSpacecrafHandlers(spacecraftService)
 
     // router
-    router.InitRouter(spacecraftHandlers, lg)
+    router.InitRouter(spacecraftHandlers, rt, lg)
 }
