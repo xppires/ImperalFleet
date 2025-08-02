@@ -44,6 +44,8 @@ var dsn string
     case "mysql":
         dsn = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true",
             config.User, config.Password, config.Host, config.Port, config.DBName)
+    case "local":
+        return nil, config // Local repository does not require a database connection
     default:
          log.Fatal("unsupported database driver: %s", config.Driver)
     }

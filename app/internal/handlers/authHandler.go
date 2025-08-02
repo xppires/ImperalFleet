@@ -2,16 +2,27 @@ package handlers
 
 import (
     "app/internal/common"
+	"app/internal/services"
 	"app/internal/models"
 	"net/http" 
 	"log"
 	"encoding/json" 
 )
+
+type AuthHandler struct {
+	authService *services.AuthService
+}
+func NewAuthHandler(authService *services.AuthService) *AuthHandler {
+	return &AuthHandler{
+		authService: authService,
+	}
+}
+
 // authenticate handles the user authentication.
 // It expects a JSON body with username and password.
 // If the credentials are valid, it generates a JWT token and returns it in the response.
 // If the credentials are invalid, it returns an unauthorized status.
-func Authenticate(w http.ResponseWriter, r *http.Request) {
+func (a *AuthHandler) Authenticate(w http.ResponseWriter, r *http.Request) {
 	
 	var user models.User
 	 if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
@@ -25,7 +36,9 @@ func Authenticate(w http.ResponseWriter, r *http.Request) {
 		common.HandleErrorMsg(w, "Please provide username and password to obtain the token", http.StatusBadRequest)
 		return
 	}
-	if ok, userId,role, _ := user.Authenticate(); ok { 
+
+	// if ok, userId,role, _ := user.Authenticate(); ok { 
+	if ok, userId,role, _ := a.authService.Authenticate(user.Username,user.Password); ok { 	
 	// if (user.Username == "neo" && user.Password == "keanu") || (user.Username == "morpheus" && user.Password == "lawrence") {
 		token, err := common.GetToken(userId, role)
 		if err != nil {
