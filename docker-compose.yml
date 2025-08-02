@@ -54,3 +54,22 @@ services:
     ports:
       - "8081:8081"
  
+  ums:
+    build: 
+      context: ./app
+      dockerfile: DockerfileUms
+    environment:
+      DB_DRIVER:  local
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_DATABASE: imperial_users
+      DB_HOST: mysql 
+      APP_SECRET: "abc&1*~#^2^#s0^=)^^7%b34"
+      GLOBAL_RATE: 10
+      GLOBAL_RATE_BURSTS: 10
+    depends_on:
+      mysql:
+        condition: service_healthy 
+    ports:
+      - "8082:8082"
+ 
