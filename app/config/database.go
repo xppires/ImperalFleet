@@ -18,6 +18,7 @@ type DatabaseConfig struct {
 	User     string
 	Password string
 	SSLMode  string
+    GrpcAddr string // gRPC address for remote repository
 }
 
 // initMysql initializes the MySQL database connection
@@ -32,6 +33,7 @@ func InitDB() (interfaces.DBStore, DatabaseConfig) {
         User: common.GetEnvOrDefault("DB_USERNAME", "root"),
         Password: common.GetEnvOrDefault("DB_PASSWORD", ""),
         SSLMode:  common.GetEnvOrDefault("DB_SSL_MODE", "disable"),
+        GrpcAddr: common.GetEnvOrDefault("DB_GRPC_ADDR", ":9000"),
     }
     // Db ,err := stores.NewDatabase(Database)
 
@@ -46,6 +48,10 @@ var dsn string
             config.User, config.Password, config.Host, config.Port, config.DBName)
     case "local":
         return nil, config // Local repository does not require a database connection
+    case "grpc":
+        // gRPC does not require a database connection, return nil
+        return nil, config
+    // Add other database drivers as needed
     default:
          log.Fatal("unsupported database driver: %s", config.Driver)
     }

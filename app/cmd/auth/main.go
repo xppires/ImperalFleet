@@ -24,6 +24,8 @@ func main() {
         // authRepo = repository.NewAuthRepositoryMysql(db) 
 	case "local":
 		authRepo = repository.NewAuthRepositoryLocal()
+	case "grpc":
+		authRepo = repository.NewAuthRepositoryGRPCClient(dbConfig.GrpcAddr)
 	
     }
 

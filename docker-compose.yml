@@ -40,7 +40,7 @@ services:
       context: ./app
       dockerfile: DockerfileAuth
     environment:
-      DB_DRIVER:  local
+      DB_DRIVER:  grpc
       DB_USERNAME: root
       DB_PASSWORD: password
       DB_DATABASE: imperial_auth
