@@ -33,7 +33,7 @@ func InitDB() (interfaces.DBStore, DatabaseConfig) {
         User: common.GetEnvOrDefault("DB_USERNAME", "root"),
         Password: common.GetEnvOrDefault("DB_PASSWORD", ""),
         SSLMode:  common.GetEnvOrDefault("DB_SSL_MODE", "disable"),
-        GrpcAddr: common.GetEnvOrDefault("DB_GRPC_ADDR", ":9000"),
+        GrpcAddr: common.GetEnvOrDefault("DB_GRPC_ADDR", ":7070"),
     }
     // Db ,err := stores.NewDatabase(Database)
 

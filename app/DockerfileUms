@@ -20,7 +20,7 @@ RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest \
 
 RUN protoc --proto_path=protobuf "protobuf/users.proto" \
 		--go_out=internal/genproto/users --go_opt=paths=source_relative \
-  	--go-grpc_out=internal/genproto/users --go-grpc_opt=paths=source_relative
+  	--go-grpc_out=require_unimplemented_servers=false:internal/genproto/users --go-grpc_opt=paths=source_relative 
 
 RUN go build  -mod=mod -o main ./cmd/ums/main.go
 

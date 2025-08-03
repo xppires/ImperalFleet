@@ -1,15 +1,30 @@
 package  services
 
 import (
-	"app/internal/repository"
+	"context"
+	"app/internal/repository" 
+	pb "app/internal/genproto/users"  
 )
 
+
+
 type UmsService struct {
-	authRepo repository.AuthRepository
+	repo repository.UmsRepository 
 }
-func NewUmsService(authRepo repository.AuthRepository) *UmsService {
-	return &UmsService{authRepo: authRepo}
+func NewUmsService(repo repository.UmsRepository) *UmsService {
+	return &UmsService{repo: repo}
 }
-func (s *UmsService) Authenticate(username, password string) (bool, string, string, error) {
-	return s.authRepo.Authenticate(username, password)
+func (s *UmsService) Authenticate(ctx context.Context, authRequest *pb.AuthenticateRequest) (*pb.AuthenticateResponse, error) {
+	return s.repo.Authenticate(ctx, authRequest)
 }
+func (s *UmsService) GetUserById(ctx context.Context, req *pb.GetUserByIdRequest) (*pb.GetUserByIdResponse, error) {
+	return s.repo.GetUserById(ctx,req)
+}	
+func (s *UmsService) GetUsers(ctx context.Context, userRequest *pb.GetUsersRequest) (*pb.GetUsersResponse, error) {
+	return s.repo.GetUsers(ctx, userRequest	)
+}
+
+// func (s *UmsService) mustEmbedUnimplementedUserServiceServer() {
+// 	// This method is required to implement the gRPC service interface.
+// 	// It can be left empty if you are not using the generated code.
+// }

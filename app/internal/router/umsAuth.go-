@@ -11,7 +11,7 @@ import (
  
 )
 
-func InitUmsRouter(handlers *handlers.UmsHandler, RateLimite interfaces.RateLimiter, logger interfaces.Logger)  {
+func InitUmsRouter(handler *handlers.UmsHandler, RateLimite interfaces.RateLimiter, logger interfaces.Logger)  {
  	
 	gr := middleware.NewGobalRateMiddleWare(RateLimite)
 	rtr:= mux.NewRouter()
@@ -19,7 +19,7 @@ func InitUmsRouter(handlers *handlers.UmsHandler, RateLimite interfaces.RateLimi
     rtr.Use(middleware.CORSMiddleware)
 
 	umsRoutes := rtr.Methods(http.MethodPost, http.MethodDelete).Subrouter()  
-	umsRoutes.HandleFunc("/v1/authenticate", handlers.Authenticate).Methods(http.MethodPost) 
+	umsRoutes.HandleFunc("/v1/authenticate", handler.Authenticate).Methods(http.MethodPost) 
 
 	http.Handle("/", rtr) 
 	logger.Info("Router initialized successfully on :8082")

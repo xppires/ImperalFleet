@@ -4,6 +4,7 @@ option go_package = "app/internal/services/common/users";
 
 service UserService { 
   rpc GetUsers(GetUsersRequest) returns (GetUsersResponse) {}
+  rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse) {}
   rpc Authenticate(AuthenticateRequest) returns (AuthenticateResponse) {}
 }
 
@@ -15,16 +16,23 @@ message User {
     string Role = 5;
 }
 message GetUsersRequest{
-    int32 UID = 1;
+    string filter = 1;
 }
 message GetUsersResponse{
     repeated User users = 1;
 }
+
 message AuthenticateRequest {
     string username = 1;
     string password = 2;
 }
-message AuthenticateResponse {
+message AuthenticateResponse { 
     string UID = 1;
     string Role = 2;
+}
+message GetUserByIdRequest{
+    string UID = 1;
+}
+message GetUserByIdResponse{
+    User user = 1;
 }

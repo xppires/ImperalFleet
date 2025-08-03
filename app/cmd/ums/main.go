@@ -4,20 +4,21 @@ import (
     "app/internal/services" 
     "app/internal/repository"
     "app/internal/handlers"   
-    "app/internal/router"
+    // "app/internal/router"
+    "app/internal/gRPCServer"
 )
 
 
 func main() {
     
-    lg := config.InitLogger()
-    // db, dbConfig := config.InitDB()
-	_, dbConfig := config.InitDB()
-    rt := config.InitGlobalLimitRate()
+    config.InitLogger()
+    // db, config := config.InitDB()
+	_, config := config.InitDB()
+    // rt := config.InitGlobalLimitRate()
 
     // repositories
     var umsRepo repository.UmsRepository
-    switch dbConfig.Driver {
+    switch config.Driver {
     case "postgres":
         // umsRepo = repository.NewUmsRepositoryPosrtgresql(db)
     case "mysql":
@@ -29,9 +30,14 @@ func main() {
 
     // services
     umsService := services.NewUmsService(umsRepo)
+    
+    grpcSrv := gRPCServer.NewUmsGRPCServer(config.GrpcAddr )
     // handlers 
-    umsHandlers := handlers.NewUmsHandler(umsService)
+    handlers.NewGrpcUmsHandler(grpcSrv.GrpcServer,umsService)
+
+	grpcSrv.Run()
+
 
     // router
-    router.InitUmsRouter(umsHandlers, rt, lg)
+    // router.InitUmsRouter(umsHandlers, rt, lg)
 }
