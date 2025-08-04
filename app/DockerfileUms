@@ -26,6 +26,6 @@ RUN go build  -mod=mod -o main ./cmd/ums/main.go
 
 
 
-EXPOSE 8081
+EXPOSE 8082
 
 CMD ["./main"]
