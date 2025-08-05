@@ -9,14 +9,14 @@ import (
 
 
 func main() {
-    
+    appConfig, _ := config.LoadConfig()
     lg := config.InitLogger()
-    db, dbConfig := config.InitDB()
+    db := config.InitDB(appConfig)
     rt := config.InitGlobalLimitRate()
 
     // repositories
     var spacecraftRepo repository.SpacecraftRepository
-    switch dbConfig.Driver {
+    switch appConfig.Database.Driver {
     case "postgres":
         spacecraftRepo = repository.NewSpacecraftRepositoryPosrtgresql(db)
     case "mysql":
@@ -29,5 +29,5 @@ func main() {
     spacecraftHandlers := handlers.NewSpacecrafHandlers(spacecraftService)
 
     // router
-    router.InitRouter(spacecraftHandlers, rt, lg)
+    router.InitRouter(appConfig,spacecraftHandlers, rt, lg)
 }

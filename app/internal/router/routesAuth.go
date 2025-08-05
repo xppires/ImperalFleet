@@ -7,11 +7,12 @@ import (
 	"app/internal/middleware"
     "app/internal/interfaces"  
 	"app/internal/handlers"
+	"app/config"
 
  
 )
 
-func InitAuthRouter(handlers *handlers.AuthHandler, RateLimite interfaces.RateLimiter, logger interfaces.Logger)  {
+func InitAuthRouter(appconfig *config.ConfigApp, handlers *handlers.AuthHandler, RateLimite interfaces.RateLimiter, logger interfaces.Logger)  {
  	
 	gr := middleware.NewGobalRateMiddleWare(RateLimite)
 	rtr:= mux.NewRouter()
@@ -24,7 +25,7 @@ func InitAuthRouter(handlers *handlers.AuthHandler, RateLimite interfaces.RateLi
 	http.Handle("/", rtr) 
 	logger.Info("Router initialized successfully on :8081")
     // log.Println("Server running on :8080")
-    log.Fatal(http.ListenAndServe(":8081", nil))
+    log.Fatal(http.ListenAndServe(appconfig.Server.Addr, nil))
 }
 
  

@@ -11,14 +11,16 @@ import (
 
 func main() {
     
+    appConfig, _ := config.LoadConfig()
+
     config.InitLogger()
     // db, config := config.InitDB()
-	_, config := config.InitDB()
+	// _ := config.InitDB(appConfig)
     // rt := config.InitGlobalLimitRate()
 
     // repositories
     var umsRepo repository.UmsRepository
-    switch config.Driver {
+    switch appConfig.Database.Driver {
     case "postgres":
         // umsRepo = repository.NewUmsRepositoryPosrtgresql(db)
     case "mysql":
@@ -31,7 +33,7 @@ func main() {
     // services
     umsService := services.NewUmsService(umsRepo)
     
-    grpcSrv := gRPCServer.NewUmsGRPCServer(config.GrpcAddr )
+    grpcSrv := gRPCServer.NewUmsGRPCServer(appConfig.Server.GrpcAddr )
     // handlers 
     handlers.NewGrpcUmsHandler(grpcSrv.GrpcServer,umsService)
 

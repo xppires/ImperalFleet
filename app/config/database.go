@@ -10,32 +10,14 @@ import (
     "fmt"
 )
   
-type DatabaseConfig struct {
-	Driver   string
-	Host     string
-	Port     int
-	DBName   string
-	User     string
-	Password string
-	SSLMode  string
-    GrpcAddr string // gRPC address for remote repository
-}
+
 
 // initMysql initializes the MySQL database connection
 // It reads the database connection parameters from environment variables.
 // It connects to the MySQL database and checks if the connection is successful.
-func InitDB() (interfaces.DBStore, DatabaseConfig) {
-    config := DatabaseConfig{
-        Driver:   common.GetEnvOrDefault("DB_DRIVER", "mysql"),
-        Host:     common.GetEnvOrDefault("DB_HOST", "localhost"),
-        Port:     common.GetEnvIntOrDefault("DB_PORT", 3306),
-        DBName:     common.GetEnvOrDefault("DB_DATABASE", "task_api"),
-        User: common.GetEnvOrDefault("DB_USERNAME", "root"),
-        Password: common.GetEnvOrDefault("DB_PASSWORD", ""),
-        SSLMode:  common.GetEnvOrDefault("DB_SSL_MODE", "disable"),
-        GrpcAddr: common.GetEnvOrDefault("DB_GRPC_ADDR", ":7070"),
-    }
-    // Db ,err := stores.NewDatabase(Database)
+func InitDB(configApp *ConfigApp ) (interfaces.DBStore) {
+ 
+    config := configApp.Database
 
 var dsn string
     
@@ -47,10 +29,10 @@ var dsn string
         dsn = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true",
             config.User, config.Password, config.Host, config.Port, config.DBName)
     case "local":
-        return nil, config // Local repository does not require a database connection
+        return nil // Local repository does not require a database connection
     case "grpc":
         // gRPC does not require a database connection, return nil
-        return nil, config
+        return nil
     // Add other database drivers as needed
     default:
          log.Fatal("unsupported database driver: %s", config.Driver)
@@ -64,14 +46,6 @@ var dsn string
     if err != nil {
         log.Fatal("failed to open database: %w", err) 
     }
-    
-   
-    // var err error
-    // Db, err := sql.Open("mysql", os.Getenv("MYSQL_ROOT_USER") + ":"+os.Getenv("MYSQL_ROOT_PASSWORD")+"@tcp("+os.Getenv("MYSQL_HOST") + ":3306"+")/"+os.Getenv("MYSQL_DATABASE")+"?parseTime=true")
-   
-    //  if err != nil {
-    //     log.Fatal("Error connecting to DB:", err)
-    // }
 
     // Configure connection pool
 	db.SetMaxOpenConns(common.GetEnvIntOrDefault("DB_MAXOPEN",25)) // Max open connections
@@ -85,7 +59,7 @@ var dsn string
     }
     var  dbStore interfaces.DBStore
     dbStore = db
-    return dbStore, config
+    return dbStore
 }
 
  

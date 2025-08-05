@@ -9,15 +9,14 @@ import (
 
 
 func main() {
-    
-    lg := config.InitLogger()
-    // db, dbConfig := config.InitDB()
-	_, dbConfig := config.InitDB()
+    appConfig, _ := config.LoadConfig()
+    lg := config.InitLogger() 
+	// _ := config.InitDB(appConfig)
     rt := config.InitGlobalLimitRate()
 
     // repositories
     var authRepo repository.AuthRepository
-    switch dbConfig.Driver {
+ switch appConfig.Database.Driver {
     case "postgres":
         // authRepo = repository.NewAuthRepositoryPosrtgresql(db)
     case "mysql":
@@ -25,7 +24,7 @@ func main() {
 	case "local":
 		authRepo = repository.NewAuthRepositoryLocal()
 	case "grpc":
-		authRepo = repository.NewAuthRepositoryGRPCClient(dbConfig.GrpcAddr)
+		authRepo = repository.NewAuthRepositoryGRPCClient(appConfig.Server.GrpcAddr)
 	
     }
 
@@ -35,5 +34,5 @@ func main() {
     authHandlers := handlers.NewAuthHandler(authService)
 
     // router
-    router.InitAuthRouter(authHandlers, rt, lg)
+    router.InitAuthRouter(appConfig,authHandlers, rt, lg)
 }
