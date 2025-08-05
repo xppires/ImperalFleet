@@ -8,7 +8,6 @@ import (
  
 type umsgRPCHandler struct {
 	service *services.UmsService
-	// unimplementedOrderServiceServer pb.UnimplementedOrderServiceServer
 }	
 func NewGrpcUmsHandler(grpcServer *grpc.Server, service *services.UmsService)  *umsgRPCHandler {
 	h := &umsgRPCHandler{service: service}
