@@ -91,6 +91,8 @@ func (r *SpacecraftRepositoryMysql) Get( ctx context.Context,filters *map[string
 			tx.Rollback()
 			return nil, fmt.Errorf("spacecraft_repo: retrieve armaments: %w", err)
 		}
+		defer armRows.Close()
+		
 		for armRows.Next() {
 			var armament models.Armament
 			if err := armRows.Scan(&armament.ID, &armament.CraftID, &armament.Title, &armament.Quantity); err != nil {

@@ -160,10 +160,12 @@ func (s *SpacecraftHandlers) SpacecraftHandleGet(w http.ResponseWriter, r *http.
 	spacecrafts, err := s.spacecraftService.Get(ctx,&values)
 	if err != nil {
 		common.HandleError( w, err.Error(), http.StatusInternalServerError, "failed to retrieve spaceships")
+		return
 	}
 
 	if err := common.WriteJSON(w, http.StatusOK, spacecrafts); err != nil {
 		common.HandleError( w, err, http.StatusInternalServerError, "failed to produce response")
+		return
 	}
 
 }
