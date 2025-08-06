@@ -31,7 +31,7 @@ func main() {
     // services
     authService := services.NewAuthService(authRepo)
     // handlers 
-    authHandlers := handlers.NewAuthHandler(authService)
+    authHandlers := handlers.NewAuthHandler(authService, appConfig)
 
     // router
     router.InitAuthRouter(appConfig,authHandlers, rt, lg)

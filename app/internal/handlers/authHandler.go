@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"app/config"
     "app/internal/common"
 	"app/internal/services"
 	"app/internal/models"
@@ -11,13 +12,14 @@ import (
 
 type AuthHandler struct {
 	authService *services.AuthService
+	appConfig *config.ConfigApp
 }
-func NewAuthHandler(authService *services.AuthService) *AuthHandler {
+func NewAuthHandler(authService *services.AuthService, appConfig *config.ConfigApp) *AuthHandler {
 	return &AuthHandler{
 		authService: authService,
+		appConfig: appConfig,
 	}
 }
-
 // authenticate handles the user authentication.
 // It expects a JSON body with username and password.
 // If the credentials are valid, it generates a JWT token and returns it in the response.
@@ -40,7 +42,7 @@ func (a *AuthHandler) Authenticate(w http.ResponseWriter, r *http.Request) {
 	// if ok, userId,role, _ := user.Authenticate(); ok { 
 	if ok, userId,role, _ := a.authService.Authenticate(user.Username,user.Password); ok { 	
 	// if (user.Username == "neo" && user.Password == "keanu") || (user.Username == "morpheus" && user.Password == "lawrence") {
-		token, err := common.GetToken(userId, role)
+		token, err := common.GetToken(a.appConfig.JWT.Key , userId, role)
 		if err != nil {
 			common.HandleErrorSimple(w, err, http.StatusInternalServerError)
 		} else {
