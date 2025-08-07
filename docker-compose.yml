@@ -22,6 +22,7 @@ services:
   app:
     build:  ./app
     environment:
+      APP_URL: ":8080"
       DB_USERNAME: root
       DB_PASSWORD: password
       DB_DATABASE: imperial_fleet
@@ -40,6 +41,7 @@ services:
       context: ./app
       dockerfile: DockerfileAuth
     environment:
+      APP_URL: ":8081"
       DB_GRPC_ADDR: "ums:8082"
       DB_DRIVER:  grpc
       DB_USERNAME: root
@@ -55,6 +57,23 @@ services:
     ports:
       - "8081:8081"
  
+  postgres:
+    image: apache/age:latest
+    container_name: postgres-age
+    environment:
+      POSTGRES_USER: age
+      POSTGRES_PASSWORD: age
+      POSTGRES_DB: age_demo
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready", "-U","postgres","-d", "age_demo"]
+        interval: 30s
+        timeout: 60s
+        retries: 5
+        start_period: 80s
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./app/packages/postgresql/initDB.sql:/docker-entrypoint-initdb.d/init.sql
   ums:
     build: 
       context: ./app
@@ -62,10 +81,10 @@ services:
     environment:
       DB_GRPC_ADDR: "0.0.0.0:8082"
       DB_DRIVER:  local
-      DB_USERNAME: root
-      DB_PASSWORD: password
+      DB_USERNAME: age
+      DB_PASSWORD: age
       DB_DATABASE: imperial_users
-      DB_HOST: mysql 
+      DB_HOST: postgres 
       APP_SECRET: "abc&1*~#^2^#s0^=)^^7%b34"
       GLOBAL_RATE: 10
       GLOBAL_RATE_BURSTS: 10
