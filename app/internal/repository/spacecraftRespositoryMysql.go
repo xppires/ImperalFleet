@@ -20,9 +20,36 @@ func NewSpacecraftRepositoryMysql(conn interfaces.DBStore) *SpacecraftRepository
 }
 
 // Create an entry for a new spaceship.
-func (r *SpacecraftRepositoryMysql) Create( craft *models.SpacecraftRequest) (int, error) {
+func (r *SpacecraftRepositoryMysql) Create( ctx context.Context,craft *models.SpacecraftRequest) (int64, error) {
+	qSpaceship := `INSERT INTO spaceships (name, class, status, image, crew, value) VALUES (?, ?, ?, ?, ?, ?)`
+	qArmaments := `INSERT INTO armaments (spaceship_id,title, qty) VALUES (?, ?, ?)`
 
-	 return 0, fmt.Errorf("not implemented")
+	tx, err := r.conn.BeginTx(ctx, nil)
+	if err != nil {
+		return 0, fmt.Errorf("spacecraft_repo: begin tx: %w", err)
+	}
+
+	insertArmament, err := tx.Prepare(qArmaments)
+	if err != nil {
+		return 0, fmt.Errorf("spacecraft_repo: prepare stmt: %w", err)
+	}
+
+	result, err := tx.ExecContext(ctx, qSpaceship, craft.Name, craft.Class, craft.Status, craft.Image, craft.Crew, craft.Value)
+	if err != nil {
+		tx.Rollback()
+		return 0, fmt.Errorf("spacecraft_repo: insert spacecraft: %w", err)
+	}
+	lastID,_ := result.LastInsertId()   
+
+	for _, armament := range craft.Armament {
+		_, err := insertArmament.ExecContext(ctx, lastID, armament.Title, armament.Quantity)
+		if err != nil {
+			tx.Rollback()
+			return 0, fmt.Errorf("spacecraft_repo: insert armament: %w", err)
+		}
+	}
+	tx.Commit()
+	return lastID,nil
 }
 
 func (r *SpacecraftRepositoryMysql) Update( id int, craft *models.SpacecraftRequest) error {
@@ -92,7 +119,7 @@ func (r *SpacecraftRepositoryMysql) Get( ctx context.Context,filters *map[string
 			return nil, fmt.Errorf("spacecraft_repo: retrieve armaments: %w", err)
 		}
 		defer armRows.Close()
-		
+
 		for armRows.Next() {
 			var armament models.Armament
 			if err := armRows.Scan(&armament.ID, &armament.CraftID, &armament.Title, &armament.Quantity); err != nil {

@@ -22,8 +22,8 @@ func NewSpacecraftService(spacecraftkRepo repository.SpacecraftRepository ) *Spa
 }
 
 
-func (s *SpacecraftService) Create(Spacecraft *models.SpacecraftRequest) (int, error) {
-	SpacecraftID, err := s.SpacecraftRepo.Create(Spacecraft)
+func (s *SpacecraftService) Create(ctx context.Context, Spacecraft *models.SpacecraftRequest) (int64, error) {
+	SpacecraftID, err := s.SpacecraftRepo.Create(ctx,Spacecraft)
 	return  SpacecraftID, err
 }
 

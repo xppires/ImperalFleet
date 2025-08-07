@@ -19,7 +19,7 @@ func NewSpacecraftRepositoryPosrtgresql(conn interfaces.DBStore) *SpacecraftRepo
 }
 
 // Create an entry for a new spaceship.
-func (r *SpacecraftRepositoryPosrtgresql) Create( craft *models.SpacecraftRequest) (int, error) {
+func (r *SpacecraftRepositoryPosrtgresql) Create( ctx context.Context,craft *models.SpacecraftRequest) (int64, error) {
 
 	 return 0, fmt.Errorf("not implemented")
 }
