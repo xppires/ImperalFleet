@@ -5,6 +5,7 @@ import (
 	"app/internal/interfaces"
 	"context"
 	"fmt" 
+	"log"
 	
 )
 
@@ -20,7 +21,7 @@ func NewSpacecraftRepositoryMysql(conn interfaces.DBStore) *SpacecraftRepository
 }
 
 // Create an entry for a new spaceship.
-func (r *SpacecraftRepositoryMysql) Create( ctx context.Context,craft *models.SpacecraftRequest) (int64, error) {
+func (r *SpacecraftRepositoryMysql) Create( ctx context.Context, craft *models.SpacecraftRequest) (int64, error) {
 	qSpaceship := `INSERT INTO spaceships (name, class, status, image, crew, value) VALUES (?, ?, ?, ?, ?, ?)`
 	qArmaments := `INSERT INTO armaments (spaceship_id,title, qty) VALUES (?, ?, ?)`
 
@@ -52,12 +53,23 @@ func (r *SpacecraftRepositoryMysql) Create( ctx context.Context,craft *models.Sp
 	return lastID,nil
 }
 
-func (r *SpacecraftRepositoryMysql) Update( id int, craft *models.SpacecraftRequest) error {
-  return fmt.Errorf("not implemented")
+func (r *SpacecraftRepositoryMysql) Update( ctx context.Context, id string, craft *models.SpacecraftRequest) error {
+ q := "UPDATE spaceships SET name = ?, class = ?, status = ?, image = ?, crew = ?, value = ? WHERE id = ?"
+ log.Println("Id: "+id)
+	res, err := r.conn.ExecContext(ctx, q, craft.Name, craft.Class, craft.Status, craft.Image, craft.Crew, craft.Value, id)
+	if err != nil {
+		return fmt.Errorf("spacecraft_repo: update spacecraft: %w", err)
+	}
+	rAff, _ := res.RowsAffected()
+	if rAff == 0 {
+		return errNotFound
+	}
+	return nil
 }
 func (r *SpacecraftRepositoryMysql) Delete( id int) error {
 	  return fmt.Errorf("not implemented")
 }
+
 func (r *SpacecraftRepositoryMysql) GetByID( id int,filter *string) (models.Spacecraft, error) {
 	var spacecraft models.Spacecraft
 	  return spacecraft, fmt.Errorf("not implemented")

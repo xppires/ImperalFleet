@@ -39,6 +39,6 @@ func (s *SpacecraftService) GetByID(SpacecraftID int ,filter *string) ( models.S
 	return s.SpacecraftRepo.GetByID(SpacecraftID, filter)
 }
 
-func (s *SpacecraftService) Update(SpacecraftID int, craft *models.SpacecraftRequest) (  error) {
-	return  s.SpacecraftRepo.Update(SpacecraftID, craft) 
+func (s *SpacecraftService) Update(ctx context.Context,SpacecraftID string, craft *models.SpacecraftRequest) (  error) {
+	return  s.SpacecraftRepo.Update(ctx, SpacecraftID, craft) 
 }

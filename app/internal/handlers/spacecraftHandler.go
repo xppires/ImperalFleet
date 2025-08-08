@@ -7,7 +7,7 @@ import (
 	"app/internal/common"
 	"app/internal/models"  
 	"errors" 
-	"encoding/json"
+	"github.com/gorilla/mux"
 	"log"
 )
 type SpacecraftHandlers struct {
@@ -26,10 +26,7 @@ var (
 )
 
 func (s *SpacecraftHandlers) Create(w http.ResponseWriter, r *http.Request) {
-	type response struct {
-		success string `json:"success"`
-	}
-
+	
 	craft, err := common.ReadJSON[*models.SpacecraftRequest](r)
 	if err != nil {
 		common.HandleError( w, err, http.StatusBadRequest, "invalid or malformed json"+err.Error())
@@ -55,42 +52,39 @@ func (s *SpacecraftHandlers) Create(w http.ResponseWriter, r *http.Request) {
 	
 }
 
-func (s *SpacecraftHandlers) SpacecraftHandleUpdate(w http.ResponseWriter, r *http.Request) {
-	type response struct {
-		success string `json:"success"`
-	}
-	
-
-
-	id, err := strconv.Atoi(r.PathValue("id"))
-	if err != nil {
-		common.HandleError( w, err, http.StatusBadRequest, "invalid spaceship id")
-	}
-
-	// reqData, err := common.ReadJSON[models.SpacecraftRequest](r)
-	// if err != nil {
-	// 	common.HandleError( w, err, http.StatusBadRequest, "invalid or malformed json")
-	// }
-	var craft *models.SpacecraftRequest
-	if err := json.NewDecoder(r.Body).Decode(&craft); err != nil {
-		common.HandleErrorMsg(w, "Invalid input (hnd)", http.StatusBadRequest)
+func (s *SpacecraftHandlers) Update(w http.ResponseWriter, r *http.Request) {
+	pathVars := mux.Vars(r) 
+    Id, ok := pathVars["id"]
+	if !ok {
+		common.HandleError( w, nil, http.StatusBadRequest, "invalid or request")
 		return
 	}
-	err = s.spacecraftService.Update(id, craft)
+
+	craft, err := common.ReadJSON[*models.SpacecraftRequest](r)
 	if err != nil {
-		switch err {
-		case errNotFound:
-			common.HandleError( w, err, http.StatusNotFound, "entry not found")
-		default:
-			common.HandleError( w, err, http.StatusInternalServerError, "failed to update entry")
-		}
+		common.HandleError( w, err, http.StatusBadRequest, "invalid or malformed json"+err.Error())
+		return
 	}
 
-	if err := common.WriteJSON(w, http.StatusCreated, response{success: "true"}); err != nil {
+	ctx := r.Context()		
+	err = s.spacecraftService.Update(ctx,Id,craft)
+	if err != nil {
+		common.HandleError( w, err, http.StatusInternalServerError, "failed to update entry "+err.Error())
+		return
+	}
+
+	
+	if err := common.WriteJSON(w, http.StatusOK, map[string]interface{}{
+			"code":   "200",
+			"message": "success",
+			"body":    "updated",
+		}); err != nil {
 		common.HandleError( w, err, http.StatusInternalServerError, "failed to provide response")
+		return
 	}
 	
 }
+
 
 func (s *SpacecraftHandlers) SpacecraftHandleDelete(w http.ResponseWriter, r *http.Request) {
 	type response struct {

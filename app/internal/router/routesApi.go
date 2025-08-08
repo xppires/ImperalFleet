@@ -19,7 +19,7 @@ func InitRouter(configApp *config.ConfigApp,spacecraftHandler *handlers.Spacecra
 	rtr.Use(gr.RateLimitMiddleware)
     rtr.Use(middleware.CORSMiddleware)
 
-	craftRoutes := rtr.Methods(http.MethodGet, http.MethodDelete, http.MethodPost).Subrouter() 
+	craftRoutes := rtr.Methods(http.MethodGet, http.MethodDelete, http.MethodPost, http.MethodPut).Subrouter() 
 	ga := middleware.NewAutenticateMiddleware(configApp)
     // craftRoutes.Use(middleware.AuthMiddleware )
 	craftRoutes.Use(ga.AuthMiddleware)
@@ -28,6 +28,8 @@ func InitRouter(configApp *config.ConfigApp,spacecraftHandler *handlers.Spacecra
 	craftRoutes.HandleFunc("/v1/spacecrafts", spacecraftHandler.SpacecraftHandleGet).Methods(http.MethodGet)
 	craftRoutes.HandleFunc("/v1/spacecrafts/{id}",spacecraftHandler.SpacecraftHandleGetByID).Methods(http.MethodGet)
 	craftRoutes.HandleFunc("/v1/spacecrafts", spacecraftHandler.Create).Methods(http.MethodPost)
+	craftRoutes.HandleFunc("/v1/spacecrafts/{id}",spacecraftHandler.Update).Methods(http.MethodPut)
+
 	// rtr.HandleFunc("/v1/spacecrafts/", spacecraftHandler(repo, logger))
 	// rtr.HandleFunc("/v1/spacecrafts/", spacecraftHandler(repo, logger))
 

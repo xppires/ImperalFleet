@@ -24,7 +24,7 @@ func (r *SpacecraftRepositoryPosrtgresql) Create( ctx context.Context,craft *mod
 	 return 0, fmt.Errorf("not implemented")
 }
 
-func (r *SpacecraftRepositoryPosrtgresql) Update( id int, craft *models.SpacecraftRequest) error {
+func (r *SpacecraftRepositoryPosrtgresql) Update( ctx context.Context, id string, craft *models.SpacecraftRequest) error {
   return fmt.Errorf("not implemented")
 }
 func (r *SpacecraftRepositoryPosrtgresql) Delete( id int) error {
