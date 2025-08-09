@@ -66,8 +66,18 @@ func (r *SpacecraftRepositoryMysql) Update( ctx context.Context, id string, craf
 	}
 	return nil
 }
-func (r *SpacecraftRepositoryMysql) Delete( id int) error {
-	  return fmt.Errorf("not implemented")
+func (r *SpacecraftRepositoryMysql) Delete( ctx context.Context, id int) error {
+	q := "DELETE FROM spacecrafts WHERE id = ?"
+
+	res, err := r.conn.ExecContext(ctx, q, id)
+	if err != nil {
+		return fmt.Errorf("spacecraft_repo: delete spacecraft: %w", err)
+	}
+	rAff, _ := res.RowsAffected()
+	if rAff == 0 {
+		return errNotFound
+	}
+	return nil
 }
 
 func (r *SpacecraftRepositoryMysql) GetByID( id int,filter *string) (models.Spacecraft, error) {

@@ -31,8 +31,8 @@ func (s *SpacecraftService) Get(ctx context.Context, filter *map[string][]string
 	return s.SpacecraftRepo.Get(ctx,filter)
 }
 
-func (s *SpacecraftService) Delete(SpacecraftID int) (  error) {
-	return s.SpacecraftRepo.Delete(SpacecraftID)
+func (s *SpacecraftService) Delete(ctx context.Context,SpacecraftID int) (  error) {
+	return s.SpacecraftRepo.Delete(ctx, SpacecraftID)
 }
 
 func (s *SpacecraftService) GetByID(SpacecraftID int ,filter *string) ( models.Spacecraft, error) {

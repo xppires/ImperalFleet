@@ -24,7 +24,7 @@ func HandleErrorSimple(w http.ResponseWriter, err error, statusCode int) {
 
 // HandleSuccess is a utility function to handle successful responses
 func HandleError(w http.ResponseWriter, data interface{}, statusCode int, message string) {
-	
+	w.Header().Add("Content-Type", "application/json")
 	// If data is nil, just send an empty response with the status code
 	if data == nil {
 		w.WriteHeader(statusCode)
