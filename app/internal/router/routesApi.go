@@ -19,23 +19,17 @@ func InitRouter(configApp *config.ConfigApp,spacecraftHandler *handlers.Spacecra
 	rtr.Use(gr.RateLimitMiddleware)
     rtr.Use(middleware.CORSMiddleware)
 
-	craftRoutes := rtr.Methods(http.MethodGet, http.MethodDelete, http.MethodPost, http.MethodPut).Subrouter() 
-	ga := middleware.NewAutenticateMiddleware(configApp)
-    // craftRoutes.Use(middleware.AuthMiddleware )
+	craftRoutes := rtr.PathPrefix("/v1").Methods(http.MethodGet, http.MethodPut, http.MethodPost, http.MethodPut, http.MethodDelete).Subrouter() 
+	ga := middleware.NewAutenticateMiddleware(configApp) 
 	craftRoutes.Use(ga.AuthMiddleware)
+	spacecraftHandler.RegisteRoutes(craftRoutes)
 
+	// rtr.Use(ga.AuthMiddleware)
+	// spacecraftHandler.RegisteRoutes(rtr)
 
-	craftRoutes.HandleFunc("/v1/spacecrafts", spacecraftHandler.SpacecraftHandleGet).Methods(http.MethodGet)
-	craftRoutes.HandleFunc("/v1/spacecrafts/{id}",spacecraftHandler.SpacecraftHandleGetByID).Methods(http.MethodGet)
-	craftRoutes.HandleFunc("/v1/spacecrafts", spacecraftHandler.Create).Methods(http.MethodPost)
-	craftRoutes.HandleFunc("/v1/spacecrafts/{id}",spacecraftHandler.Update).Methods(http.MethodPut)
-
-	// rtr.HandleFunc("/v1/spacecrafts/", spacecraftHandler(repo, logger))
-	// rtr.HandleFunc("/v1/spacecrafts/", spacecraftHandler(repo, logger))
-
-	http.Handle("/", rtr) 
-	logger.Info("Router initialized successfully on :8080")
-    // log.Println("Server running on :8080")
+	// http.Handle("/", rtr) 
+	http.Handle("/",craftRoutes)
+	logger.Info("Router initialized successfully on :8080") 
     log.Fatal(http.ListenAndServe(configApp.Server.Addr, nil))
 }
 

@@ -20,10 +20,18 @@ func NewSpacecrafHandlers(spacecraftService *services.SpacecraftService) *Spacec
 	}
 }
 
-
 var (
 	errNotFound = errors.New("entry not found")
 )
+
+func (s *SpacecraftHandlers) RegisteRoutes(router *mux.Router) {
+	router.HandleFunc("/spacecrafts", s.get).Methods(http.MethodGet)
+	router.HandleFunc("/spacecrafts/{id}",s.GetByID).Methods(http.MethodGet)
+	router.HandleFunc("/spacecrafts", s.Create).Methods(http.MethodPost)
+	router.HandleFunc("/spacecrafts/{id}",s.Update).Methods(http.MethodPut)
+	// router.HandleFunc("/spacecrafts/{id}",s.Delete).Methods(http.MethodDelete)
+	router.Handle("/spacecrafts/{id}",http.HandlerFunc(s.Delete)).Methods(http.MethodDelete)
+}
 
 func (s *SpacecraftHandlers) Create(w http.ResponseWriter, r *http.Request) {
 	
@@ -86,63 +94,73 @@ func (s *SpacecraftHandlers) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func (s *SpacecraftHandlers) SpacecraftHandleDelete(w http.ResponseWriter, r *http.Request) {
+func (s *SpacecraftHandlers) Delete(w http.ResponseWriter, r *http.Request) {
 	type response struct {
 		success string `json:"success"`
 	}
 	
-
-
-	id, err := strconv.Atoi(r.PathValue("id"))
+	params := mux.Vars(r)
+	id, err := strconv.Atoi(params["id"])
 	if err != nil {
 		common.HandleError( w, err, http.StatusBadRequest, "invalid spaceship id")
+		return
 	}
 
-	err = s.spacecraftService.Delete(id)
+	ctx := r.Context()		
+	err = s.spacecraftService.Delete(ctx,id)
 	if err != nil {
 		switch err {
 		case errNotFound:
 			common.HandleError( w, err, http.StatusNotFound, "entry not found")
 		default:
-			common.HandleError( w, err, http.StatusInternalServerError, "failed to delete entry")
+			common.HandleError( w, err, http.StatusInternalServerError, "failed to delete entry"+err.Error())
 		}
+		return
 	}
 
-	if err := common.WriteJSON(w, http.StatusCreated, response{success: "true"}); err != nil {
+	if err := common.WriteJSON(w, http.StatusCreated, map[string]interface{}{
+			"code":   "200",
+			"message": "success",
+			"body":    "deleted",
+		}); err != nil {
 		common.HandleError( w, err, http.StatusInternalServerError, "failed to provide response")
+		return
 	}
-
+	
 }
 
-func (s *SpacecraftHandlers) SpacecraftHandleGetByID(w http.ResponseWriter, r *http.Request) {
-	
+func (s *SpacecraftHandlers) GetByID(w http.ResponseWriter, r *http.Request) {
 
-
-	id, err := strconv.Atoi(r.PathValue("id"))
+	params := mux.Vars(r)
+	id, err := strconv.Atoi(params["id"])
 	if err != nil {
-		common.HandleError( w, err, http.StatusBadRequest, "invalid id")
+		common.HandleError( w, err, http.StatusBadRequest, "invalid id"+err.Error())
+		return
 	}
 
-	spacecraft, err := s.spacecraftService.GetByID(id, nil)
+	ctx := r.Context()	
+	spacecraft, err := s.spacecraftService.GetByID(ctx, id, nil)
 	if err != nil {
 		switch err {
 		case errNotFound:
 			common.HandleError( w, err, http.StatusNotFound, "entry not found")
 		default:
-			common.HandleError( w, err, http.StatusInternalServerError, "failed to retrieve entry")
+			common.HandleError( w, err, http.StatusInternalServerError, "failed to retrieve entry"+err.Error())
 		}
+		return
 	}
 
 	if err := common.WriteJSON(w, http.StatusOK, spacecraft); err != nil {
 		common.HandleError( w, err, http.StatusInternalServerError, "failed to produce response")
+		return
 	}
 	
 }
 
 // filter by name, class, status
-func (s *SpacecraftHandlers) SpacecraftHandleGet(w http.ResponseWriter, r *http.Request) {
+func (s *SpacecraftHandlers) get(w http.ResponseWriter, r *http.Request) {
 	
-	log.Println("SpacecraftHandleGet called")
+	log.Println("Get called")
 	q := r.URL.Query()
 	values := make(map[string][]string)
 	for key, value := range q {

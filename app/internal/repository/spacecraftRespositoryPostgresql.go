@@ -23,18 +23,16 @@ func (r *SpacecraftRepositoryPosrtgresql) Create( ctx context.Context,craft *mod
 
 	 return 0, fmt.Errorf("not implemented")
 }
-
 func (r *SpacecraftRepositoryPosrtgresql) Update( ctx context.Context, id string, craft *models.SpacecraftRequest) error {
   return fmt.Errorf("not implemented")
 }
 func (r *SpacecraftRepositoryPosrtgresql) Delete( ctx context.Context, id int) error {
 	  return fmt.Errorf("not implemented")
 }
-func (r *SpacecraftRepositoryPosrtgresql) GetByID( id int,filter *string) (models.Spacecraft, error) {
+func (r *SpacecraftRepositoryPosrtgresql) GetByID( ctx context.Context, id int,filter *string) (models.Spacecraft, error) {
 	var spacecraft models.Spacecraft
 	  return spacecraft, fmt.Errorf("not implemented")
 }
-
 func (r *SpacecraftRepositoryPosrtgresql) Get( ctx context.Context,filters *map[string][]string) ([]models.Spacecraft, error) {
 	// list := []models.Spacecraft{}
 	// return list, fmt.Errorf("not implemented")

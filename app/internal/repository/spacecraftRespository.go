@@ -13,7 +13,7 @@ type SpacecraftRepository  interface {
 	Create(ctx context.Context, craft *models.SpacecraftRequest) (int64, error)
 	Update(ctx context.Context,id string, craft *models.SpacecraftRequest) error
 	Delete(ctx context.Context,id int) error
-	GetByID(id int, filter *string) (models.Spacecraft, error)
+	GetByID(ctx context.Context,id int, filter *string) (models.Spacecraft, error)
 	Get(ctx context.Context, filters *map[string][]string) ([]models.Spacecraft, error)
 }
  

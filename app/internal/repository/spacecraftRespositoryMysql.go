@@ -67,7 +67,7 @@ func (r *SpacecraftRepositoryMysql) Update( ctx context.Context, id string, craf
 	return nil
 }
 func (r *SpacecraftRepositoryMysql) Delete( ctx context.Context, id int) error {
-	q := "DELETE FROM spacecrafts WHERE id = ?"
+	q := "DELETE FROM spaceships WHERE id = ?"
 
 	res, err := r.conn.ExecContext(ctx, q, id)
 	if err != nil {
@@ -80,9 +80,40 @@ func (r *SpacecraftRepositoryMysql) Delete( ctx context.Context, id int) error {
 	return nil
 }
 
-func (r *SpacecraftRepositoryMysql) GetByID( id int,filter *string) (models.Spacecraft, error) {
-	var spacecraft models.Spacecraft
-	  return spacecraft, fmt.Errorf("not implemented")
+func (r *SpacecraftRepositoryMysql) GetByID(ctx context.Context, id int,filter *string) (models.Spacecraft, error) {
+	qSpaceship := "SELECT id, name, class, status, image, crew, value FROM spaceships WHERE id = ?"
+	qArmaments := "SELECT id, spaceship_id, title, qty FROM armaments WHERE spaceship_id = ? "
+
+	tx, err := r.conn.BeginTx(ctx, nil)
+	if err != nil {
+		return models.Spacecraft{}, fmt.Errorf("spacecraft_repo: begin tx: %w", err)
+	}
+
+	var craft models.Spacecraft
+	row := tx.QueryRowContext(ctx, qSpaceship, id)
+	if err := row.Scan(&craft.ID, &craft.Name, &craft.Class, &craft.Status, &craft.Image, &craft.Crew, &craft.Value); err != nil {
+		tx.Rollback()
+		return models.Spacecraft{}, fmt.Errorf("spacecraft_repo: retrieve spacecraft: %w", err)
+	}
+
+	armRows, err := tx.QueryContext(ctx, qArmaments, craft.ID)
+	if err != nil {
+		tx.Rollback()
+		return models.Spacecraft{}, fmt.Errorf("spacecraft_repo: retrieve armaments: %w", err)
+	}
+
+	armaments := make([]models.Armament, 0)
+	for armRows.Next() {
+		var armament models.Armament
+		if err := armRows.Scan(&armament.ID, &armament.CraftID, &armament.Title, &armament.Quantity); err != nil {
+			tx.Rollback()
+			return models.Spacecraft{}, fmt.Errorf("spacecraft_repo: retrieve armaments: %w", err)
+		}
+		armaments = append(armaments, armament)
+	}
+	craft.Armament = armaments
+
+	return craft, nil
 }
 
 func (r *SpacecraftRepositoryMysql) Get( ctx context.Context,filters *map[string][]string) ([]models.Spacecraft, error) {

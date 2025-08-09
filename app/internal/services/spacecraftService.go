@@ -35,8 +35,8 @@ func (s *SpacecraftService) Delete(ctx context.Context,SpacecraftID int) (  erro
 	return s.SpacecraftRepo.Delete(ctx, SpacecraftID)
 }
 
-func (s *SpacecraftService) GetByID(SpacecraftID int ,filter *string) ( models.Spacecraft, error) {
-	return s.SpacecraftRepo.GetByID(SpacecraftID, filter)
+func (s *SpacecraftService) GetByID(ctx context.Context, SpacecraftID int, filter *string) ( models.Spacecraft, error) {
+	return s.SpacecraftRepo.GetByID(ctx, SpacecraftID, filter)
 }
 
 func (s *SpacecraftService) Update(ctx context.Context,SpacecraftID string, craft *models.SpacecraftRequest) (  error) {
