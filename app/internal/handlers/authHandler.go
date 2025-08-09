@@ -6,6 +6,7 @@ import (
 	"app/internal/services"
 	"app/internal/models"
 	"net/http" 
+    "github.com/gorilla/mux"
 	"log"
 	"encoding/json" 
 )
@@ -19,6 +20,12 @@ func NewAuthHandler(authService *services.AuthService, appConfig *config.ConfigA
 		authService: authService,
 		appConfig: appConfig,
 	}
+}
+
+func (a *AuthHandler) RegisteRoutes(router *mux.Router){
+
+	router.HandleFunc("/authenticate", a.Authenticate).Methods(http.MethodPost) 
+
 }
 // authenticate handles the user authentication.
 // It expects a JSON body with username and password.
@@ -46,9 +53,9 @@ func (a *AuthHandler) Authenticate(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			common.HandleErrorSimple(w, err, http.StatusInternalServerError)
 		} else {
-			w.Header().Set("Authorization", "Bearer "+token)
+			w.Header().Add("Authorization", "Bearer "+token)
+			w.Header().Add("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			
 			json.NewEncoder(w).Encode(map[string]interface{}{
 				"code":   200,
 				"userId": userId,
@@ -56,6 +63,7 @@ func (a *AuthHandler) Authenticate(w http.ResponseWriter, r *http.Request) {
 				}) 
 			
 		}
+		return
 	} else {
 		common.HandleErrorMsg(w, "Name and password do not match", http.StatusUnauthorized)
 		return

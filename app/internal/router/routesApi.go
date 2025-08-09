@@ -24,10 +24,6 @@ func InitRouter(configApp *config.ConfigApp,spacecraftHandler *handlers.Spacecra
 	craftRoutes.Use(ga.AuthMiddleware)
 	spacecraftHandler.RegisteRoutes(craftRoutes)
 
-	// rtr.Use(ga.AuthMiddleware)
-	// spacecraftHandler.RegisteRoutes(rtr)
-
-	// http.Handle("/", rtr) 
 	http.Handle("/",craftRoutes)
 	logger.Info("Router initialized successfully on :8080") 
     log.Fatal(http.ListenAndServe(configApp.Server.Addr, nil))
