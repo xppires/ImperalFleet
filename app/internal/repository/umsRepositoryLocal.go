@@ -2,6 +2,7 @@ package repository
 
 import (
 	"app/internal/models"
+	"app/internal/common"
 	pb "app/internal/genproto/users"
 	"context"
 )
@@ -10,8 +11,8 @@ var UsersLocal = []models.User{
 	// Sample users
 	// In a real application, you would fetch these from a database
 	// For simplicity, we are using hardcoded values here
-	{UID: "TK1", Username: "neo", Password: "keanu", Email: "", Role: "Technician"},
-	{UID: "MG1", Username: "morpheus", Password: "lawrence", Email: "", Role: "Manager"},
+	{UID: "TK1", Username: "neo", Password: "$2a$12$1kB7EE06HKOEsC23Sadm8.gaQZFCH9FtlQVV9ob4JSG9Ei8oLmWy2", Email: "", Role: "Technician"},
+	{UID: "MG1", Username: "morpheus", Password: "$2a$12$cHVLmITk0X1sNi7nkTfwd.IxlmEeMnliBSAMM0eUIVBE.B4hh2a52", Email: "", Role: "Manager"},
 }
 
 type umsRepositoryLocal struct {
@@ -23,7 +24,7 @@ func NewUmsRepositoryLocal() *umsRepositoryLocal {
 }
 func (a *umsRepositoryLocal) Authenticate(ctx context.Context, authRequest *pb.AuthenticateRequest) (*pb.AuthenticateResponse, error) {
 	for _, user := range a.users {
-		if user.Username == authRequest.Username && user.Password == authRequest.Password {
+		if user.Username == authRequest.Username && common.CheckPasswordHash( user.Password, authRequest.Password) {
 			return &pb.AuthenticateResponse{
 				UID:  user.UID,
 				Role: user.Role,
