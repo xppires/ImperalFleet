@@ -1,0 +1,25 @@
+# Use an official Golang image
+FROM golang:1.23-alpine
+
+# Install git (needed for go modules), ca-certificates
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
+
+# Set work directory
+WORKDIR /app
+
+COPY go.mod ./go.mod
+
+RUN go mod download
+
+RUN go get github.com/DATA-DOG/go-sqlmock
+RUN go get github.com/stretchr/testify/assert 
+
+
+# Copy the rest of the application code
+COPY . .
+
+RUN go mod tidy
+
+# Run unit tests
+CMD ["go", "test", "-v", "./..."]
