@@ -4,6 +4,8 @@ import (
 	"app/internal/interfaces"
 	"app/internal/models"
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 )
 
@@ -34,22 +36,22 @@ func (r *SpacecraftRepositoryMysql) Create(ctx context.Context, craft *models.Sp
 
 	result, err := tx.ExecContext(ctx, qSpaceship, craft.Name, craft.Class, craft.Status, craft.Image, craft.Crew, craft.Value)
 	if err != nil {
-		tx.Rollback()
-		return 0, fmt.Errorf("spacecraft_repo: insert spacecraft: %w", err)
+		err2 := tx.Rollback()
+		return 0, errors.Join(fmt.Errorf("spacecraft_repo: insert spacecraft: %w", err), err2)
 	}
 	lastID, _ := result.LastInsertId()
 
 	for _, armament := range craft.Armament {
 		_, err := insertArmament.ExecContext(ctx, lastID, armament.Title, armament.Quantity)
 		if err != nil {
-			tx.Rollback()
-			return 0, fmt.Errorf("spacecraft_repo: insert armament: %w", err)
+			err2 := tx.Rollback()
+			return 0, errors.Join(fmt.Errorf("spacecraft_repo: insert armament: %w", err), err2)
 		}
 	}
 
 	if tx.Commit() != nil {
-		tx.Rollback()
-		return 0, fmt.Errorf("spacecraft_repo: insert armament: %w", err)
+		err2 := tx.Rollback()
+		return 0, errors.Join(fmt.Errorf("spacecraft_repo: insert armament: %w", err), err2)
 	}
 	return lastID, nil
 }
@@ -74,8 +76,8 @@ func (r *SpacecraftRepositoryMysql) Update(ctx context.Context, id string, craft
 	}
 
 	if tx.Commit() != nil {
-		tx.Rollback()
-		return fmt.Errorf("spacecraft_repo: insert armament: %w", err)
+		err2 := tx.Rollback()
+		return fmt.Errorf("spacecraft_repo: insert armament: %w", err2)
 	}
 	return nil
 }
@@ -101,13 +103,13 @@ func (r *SpacecraftRepositoryMysql) Delete(ctx context.Context, id int) error {
 	}
 
 	if tx.Commit() != nil {
-		tx.Rollback()
-		return fmt.Errorf("spacecraft_repo: insert armament: %w", err)
+		err2 := tx.Rollback()
+		return fmt.Errorf("spacecraft_repo: insert armament: %w", err2)
 	}
 	return nil
 }
 
-func (r *SpacecraftRepositoryMysql) GetByID(ctx context.Context, id int, filter *string) (models.Spacecraft, error) {
+func (r *SpacecraftRepositoryMysql) GetByID(ctx context.Context, id int, _ *string) (models.Spacecraft, error) {
 	qSpaceship := "SELECT id, name, class, status, image, crew, value FROM spaceships WHERE id = ?"
 	qArmaments := "SELECT id, spaceship_id, title, qty FROM armaments WHERE spaceship_id = ? "
 
@@ -119,22 +121,22 @@ func (r *SpacecraftRepositoryMysql) GetByID(ctx context.Context, id int, filter 
 	var craft models.Spacecraft
 	row := tx.QueryRowContext(ctx, qSpaceship, id)
 	if err := row.Scan(&craft.ID, &craft.Name, &craft.Class, &craft.Status, &craft.Image, &craft.Crew, &craft.Value); err != nil {
-		tx.Rollback()
-		return models.Spacecraft{}, fmt.Errorf("spacecraft_repo: retrieve spacecraft: %w", err)
+		err2 := tx.Rollback()
+		return models.Spacecraft{}, fmt.Errorf("spacecraft_repo: retrieve spacecraft: %w", err2)
 	}
 
 	armRows, err := tx.QueryContext(ctx, qArmaments, craft.ID)
 	if err != nil {
-		tx.Rollback()
-		return models.Spacecraft{}, fmt.Errorf("spacecraft_repo: retrieve armaments: %w", err)
+		err2 := tx.Rollback()
+		return models.Spacecraft{}, errors.Join(fmt.Errorf("spacecraft_repo: retrieve armaments: %w", err), err2)
 	}
 
 	armaments := make([]models.Armament, 0)
 	for armRows.Next() {
 		var armament models.Armament
 		if err := armRows.Scan(&armament.ID, &armament.CraftID, &armament.Title, &armament.Quantity); err != nil {
-			tx.Rollback()
-			return models.Spacecraft{}, fmt.Errorf("spacecraft_repo: retrieve armaments: %w", err)
+			err2 := tx.Rollback()
+			return models.Spacecraft{}, errors.Join(fmt.Errorf("spacecraft_repo: retrieve armaments: %w", err), err2)
 		}
 		armaments = append(armaments, armament)
 	}
@@ -143,7 +145,7 @@ func (r *SpacecraftRepositoryMysql) GetByID(ctx context.Context, id int, filter 
 	return craft, nil
 }
 
-func (r *SpacecraftRepositoryMysql) Get(ctx context.Context, filters *map[string][]string) ([]models.Spacecraft, error) {
+func (r *SpacecraftRepositoryMysql) Get(ctx context.Context, _ *map[string][]string) ([]models.Spacecraft, error) {
 	// list := []models.Spacecraft{}
 	// return list, fmt.Errorf("not implemented")
 
@@ -173,20 +175,30 @@ func (r *SpacecraftRepositoryMysql) Get(ctx context.Context, filters *map[string
 	if err != nil {
 		return nil, fmt.Errorf("spacecraft_repo: preparing armaments stmt: %w", err)
 	}
-	defer selectArmaments.Close()
+	defer func(selectArmaments *sql.Stmt) {
+		err := selectArmaments.Close()
+		if err != nil {
+
+		}
+	}(selectArmaments)
 	rows, err := tx.QueryContext(ctx, q)
 	if err != nil {
-		tx.Rollback()
-		return nil, fmt.Errorf("spacecraft_repo: retrieve spacecrafts spacecrafts: %w", err)
+		err2 := tx.Rollback()
+		return nil, errors.Join(fmt.Errorf("spacecraft_repo: retrieve spacecrafts spacecrafts: %w", err), err2)
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+
+		}
+	}(rows)
 
 	spaceshipsMap := make(map[int]*models.Spacecraft, 0)
 	for rows.Next() {
 		var spacecraft models.Spacecraft
 		if err := rows.Scan(&spacecraft.ID, &spacecraft.Name, &spacecraft.Class, &spacecraft.Status, &spacecraft.Image, &spacecraft.Crew, &spacecraft.Value); err != nil {
-			tx.Rollback()
-			return nil, fmt.Errorf("spacecraft_repo: retrieve spacecrafts: %w", err)
+			err2 := tx.Rollback()
+			return nil, errors.Join(fmt.Errorf("spacecraft_repo: retrieve spacecrafts: %w", err), err2)
 		}
 		spaceshipsMap[len(spaceshipsMap)] = &spacecraft
 
@@ -195,8 +207,8 @@ func (r *SpacecraftRepositoryMysql) Get(ctx context.Context, filters *map[string
 		armaments := make([]models.Armament, 0)
 		armRows, err := selectArmaments.Query(spacecraft.ID)
 		if err != nil {
-			tx.Rollback()
-			return nil, fmt.Errorf("spacecraft_repo: retrieve armaments: %w", err)
+			err2 := tx.Rollback()
+			return nil, errors.Join(fmt.Errorf("spacecraft_repo: retrieve armaments: %w", err), err2)
 		}
 
 		for armRows.Next() {
@@ -210,7 +222,12 @@ func (r *SpacecraftRepositoryMysql) Get(ctx context.Context, filters *map[string
 		clear(armaments)
 
 	}
-	defer selectArmaments.Close()
+	defer func(selectArmaments *sql.Stmt) {
+		err := selectArmaments.Close()
+		if err != nil {
+
+		}
+	}(selectArmaments)
 	returnedSpacecrafts := make([]models.Spacecraft, 0, len(spaceshipsMap))
 	for _, spacecraft := range spaceshipsMap {
 		returnedSpacecrafts = append(returnedSpacecrafts, *spacecraft)

@@ -4,23 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="833c0e98-5756-4acf-9358-238df7ba8bc3" name="Changes" comment="fixes and improvements">
+    <list default="true" id="833c0e98-5756-4acf-9358-238df7ba8bc3" name="Changes" comment="fixes and improvements 2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/cmd/auth/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/cmd/auth/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/cmd/ums/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/cmd/ums/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/config/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/database.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/config/rateLimit.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/rateLimit.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/internal/handlers/authHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/handlers/authHandler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/internal/handlers/spacecraftHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/handlers/spacecraftHandler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/internal/middleware/RateLimitMiddleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/middleware/RateLimitMiddleware.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/internal/middleware/authMiddleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/middleware/authMiddleware.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/internal/repository/authRepositoryGrpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/repository/authRepositoryGrpc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/internal/repository/umsRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/repository/umsRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/internal/router/routesApi.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/router/routesApi.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/internal/router/routesAuth.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/router/routesAuth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/internal/services/spacecraftService.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/services/spacecraftService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/internal/services/umsService.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/services/umsService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/repository/spacecraftRespositoryMysql.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/repository/spacecraftRespositoryMysql.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,8 +67,8 @@
   <component name="QodanaHighlightedReportService">
     <option name="localRunNotPublishedPersistedInfo">
       <LocalReportPersistedInfo>
-        <option name="path" value="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output4/qodana.sarif.json" />
-        <option name="reportGuid" value="0e1ef8e1-bdf4-4d1c-9f47-bd96ec74965b" />
+        <option name="path" value="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output5/qodana.sarif.json" />
+        <option name="reportGuid" value="4c0eedef-a9af-49d7-b44d-dc30e2374295" />
         <option name="reportName" value="ImperalFleet/qodana/2025-08-11" />
       </LocalReportPersistedInfo>
     </option>
@@ -92,17 +78,19 @@
   </component>
   <component name="QodanaReportsService">
     <option name="descriptions">
-      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output1/qodana.sarif.json" reportGuid="ae4cd8e4-e6ef-4ca0-a337-be727b8889b8" reportId="ImperalFleet/qodana/2025-08-11" />
-      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output2/qodana.sarif.json" reportGuid="5f20a1a2-3ccb-4ec7-abad-0bdc08402f80" reportId="ImperalFleet/qodana/2025-08-11" />
       <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output7/qodana.sarif.json" reportGuid="2e6ace6e-ad83-4500-9acd-3c21e8fd0fa9" reportId="ImperalFleet/qodana/2025-08-11" />
-      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output11/qodana.sarif.json" reportGuid="ae7707b6-d0ed-4b1c-aa0e-a9e9b663d0ea" reportId="ImperalFleet/qodana/2025-08-11" />
       <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output6/qodana.sarif.json" reportGuid="7f5fe731-6f13-4c4b-8fd7-a4e1db2614ef" reportId="ImperalFleet/qodana/2025-08-11" />
-      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output8/qodana.sarif.json" reportGuid="f9a79eee-8a65-4f67-bc6c-a150bcdae6c5" reportId="ImperalFleet/qodana/2025-08-11" />
-      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output912/qodana.sarif.json" reportGuid="ff98dc88-37b5-443c-8cce-295618eff6c2" reportId="ImperalFleet/qodana/2025-08-11" />
-      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output/qodana.sarif.json" reportGuid="08dcfd6b-c3b4-40b4-988f-328783ba2774" reportId="ImperalFleet/qodana/2025-08-10" />
-      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output3/qodana.sarif.json" reportGuid="d29cd2e9-c339-4253-8b1e-f0d2f38628d0" reportId="ImperalFleet/qodana/2025-08-11" />
       <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output10/qodana.sarif.json" reportGuid="c0bc0946-a145-434e-ba92-a6064293cd00" reportId="ImperalFleet/qodana/2025-08-11" />
       <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output4/qodana.sarif.json" reportGuid="0e1ef8e1-bdf4-4d1c-9f47-bd96ec74965b" reportId="ImperalFleet/qodana/2025-08-11" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output1/qodana.sarif.json" reportGuid="ae4cd8e4-e6ef-4ca0-a337-be727b8889b8" reportId="ImperalFleet/qodana/2025-08-11" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output2/qodana.sarif.json" reportGuid="5f20a1a2-3ccb-4ec7-abad-0bdc08402f80" reportId="ImperalFleet/qodana/2025-08-11" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output11/qodana.sarif.json" reportGuid="ae7707b6-d0ed-4b1c-aa0e-a9e9b663d0ea" reportId="ImperalFleet/qodana/2025-08-11" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output8/qodana.sarif.json" reportGuid="f9a79eee-8a65-4f67-bc6c-a150bcdae6c5" reportId="ImperalFleet/qodana/2025-08-11" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output912/qodana.sarif.json" reportGuid="ff98dc88-37b5-443c-8cce-295618eff6c2" reportId="ImperalFleet/qodana/2025-08-11" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output700/qodana.sarif.json" reportGuid="e8279d19-13a2-42bf-9c8c-2404208d994f" reportId="ImperalFleet/qodana/2025-08-11" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output/qodana.sarif.json" reportGuid="08dcfd6b-c3b4-40b4-988f-328783ba2774" reportId="ImperalFleet/qodana/2025-08-10" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output3/qodana.sarif.json" reportGuid="d29cd2e9-c339-4253-8b1e-f0d2f38628d0" reportId="ImperalFleet/qodana/2025-08-11" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output5/qodana.sarif.json" reportGuid="4c0eedef-a9af-49d7-b44d-dc30e2374295" reportId="ImperalFleet/qodana/2025-08-11" />
     </option>
   </component>
   <component name="RunManager" selected="Docker.docker-compose.yml: Compose Deployment">
@@ -163,7 +151,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fixes and improvements" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixes and improvements" />
+    <MESSAGE value="fixes and improvements 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixes and improvements 2" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
