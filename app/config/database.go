@@ -13,7 +13,7 @@ import (
 // InitDB initMysql initializes the MySQL database connection
 // It reads the database connection parameters from environment variables.
 // It connects to the MySQL database and checks if the connection is successful.
-func InitDB(configApp *ConfigApp) interfaces.DBStore {
+func InitDB(configApp *AppConfig) interfaces.DBStore {
 
 	config := configApp.Database
 
@@ -21,7 +21,7 @@ func InitDB(configApp *ConfigApp) interfaces.DBStore {
 
 	switch config.Driver {
 	case "postgres":
-		dsn = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		dsn = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
 			config.Host, config.Port, config.User, config.Password, config.DBName, config.SSLMode)
 	case "mysql":
 		dsn = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true",
@@ -33,7 +33,7 @@ func InitDB(configApp *ConfigApp) interfaces.DBStore {
 		return nil
 	// Add other database drivers as needed
 	default:
-		log.Fatal("unsupported database driver: %s", config.Driver)
+		log.Fatalf("unsupported database driver: %s", config.Driver)
 	}
 
 	fmt.Printf("Connecting to %s database at %s:%d...\n", config.Driver, config.Host, config.Port)

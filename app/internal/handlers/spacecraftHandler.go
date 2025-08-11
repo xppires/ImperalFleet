@@ -104,8 +104,8 @@ func (s *SpacecraftHandlers) Delete(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	err = s.spacecraftService.Delete(ctx, id)
 	if err != nil {
-		switch err {
-		case errNotFound:
+		switch {
+		case errors.Is(err, errNotFound):
 			common.HandleError(w, err, http.StatusNotFound, "entry not found")
 		default:
 			common.HandleError(w, err, http.StatusInternalServerError, "failed to delete entry"+err.Error())
@@ -136,8 +136,8 @@ func (s *SpacecraftHandlers) GetByID(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	spacecraft, err := s.spacecraftService.GetByID(ctx, id, nil)
 	if err != nil {
-		switch err {
-		case errNotFound:
+		switch {
+		case errors.Is(err, errNotFound):
 			common.HandleError(w, err, http.StatusNotFound, "entry not found")
 		default:
 			common.HandleError(w, err, http.StatusInternalServerError, "failed to retrieve entry"+err.Error())

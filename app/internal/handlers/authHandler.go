@@ -13,10 +13,10 @@ import (
 
 type AuthHandler struct {
 	authService *services.AuthService
-	appConfig   *config.ConfigApp
+	appConfig   *config.AppConfig
 }
 
-func NewAuthHandler(authService *services.AuthService, appConfig *config.ConfigApp) *AuthHandler {
+func NewAuthHandler(authService *services.AuthService, appConfig *config.AppConfig) *AuthHandler {
 	return &AuthHandler{
 		authService: authService,
 		appConfig:   appConfig,

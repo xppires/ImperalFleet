@@ -2,7 +2,7 @@ package services
 
 import (
 	"app/internal/models"
-	"app/inte
+	"app/internal/repository"
 	"context"
 )
 

@@ -8,10 +8,10 @@ import (
 )
 
 type AuthenticateMiddleware struct {
-	appConfig *config.ConfigApp
+	appConfig *config.AppConfig
 }
 
-func NewAutenticateMiddleware(appConfig *config.ConfigApp) *AuthenticateMiddleware {
+func NewAutenticateMiddleware(appConfig *config.AppConfig) *AuthenticateMiddleware {
 	return &AuthenticateMiddleware{appConfig: appConfig}
 }
 

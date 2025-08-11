@@ -22,13 +22,13 @@ type JWTConfig struct {
 	Key string
 }
 
-type ConfigApp struct {
+type AppConfig struct {
 	Database DatabaseConfig
 	Server   ServerConfig
 	JWT      JWTConfig
 }
 
-func LoadConfig() (*ConfigApp, error) {
+func LoadConfig() (*AppConfig, error) {
 
 	databaseConfig := DatabaseConfig{
 		Driver:   common.GetEnvOrDefault("DB_DRIVER", "mysql"),
@@ -45,7 +45,7 @@ func LoadConfig() (*ConfigApp, error) {
 		GrpcAddr: common.GetEnvOrDefault("DB_GRPC_ADDR", ":9090"),
 	}
 	jWTConfig := JWTConfig{Key: common.GetEnvOrDefault("APP_SECRET", "disable")}
-	return &ConfigApp{
+	return &AppConfig{
 		Database: databaseConfig,
 		Server:   serverConfig,
 		JWT:      jWTConfig,

@@ -1,16 +1,15 @@
-package  services
+package services
 
 import (
+	pb "app/internal/genproto/users"
+	"app/internal/repository"
 	"context"
-	"app/internal/repository" 
-	pb "app/internal/genproto/users"  
 )
 
-
-
 type UmsService struct {
-	repo repository.UmsRepository 
+	repo repository.UmsRepository
 }
+
 func NewUmsService(repo repository.UmsRepository) *UmsService {
 	return &UmsService{repo: repo}
 }
@@ -18,10 +17,10 @@ func (s *UmsService) Authenticate(ctx context.Context, authRequest *pb.Authentic
 	return s.repo.Authenticate(ctx, authRequest)
 }
 func (s *UmsService) GetUserById(ctx context.Context, req *pb.GetUserByIdRequest) (*pb.GetUserByIdResponse, error) {
-	return s.repo.GetUserById(ctx,req)
-}	
+	return s.repo.GetUserById(ctx, req)
+}
 func (s *UmsService) GetUsers(ctx context.Context, userRequest *pb.GetUsersRequest) (*pb.GetUsersResponse, error) {
-	return s.repo.GetUsers(ctx, userRequest	)
+	return s.repo.GetUsers(ctx, userRequest)
 }
 
 // func (s *UmsService) mustEmbedUnimplementedUserServiceServer() {

@@ -1,29 +1,29 @@
 package repository
 
 import (
-	"log"
+	"app/internal/genproto/users"
 	"context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"app/internal/genproto/users"
+	"log"
 )
 
 type AuthRepositoryGRPCClient struct {
 	conn *grpc.ClientConn
 }
 
-func  NewAuthRepositoryGRPCClient(addr string) *AuthRepositoryGRPCClient {
+func NewAuthRepositoryGRPCClient(addr string) *AuthRepositoryGRPCClient {
 	conn, err := grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 
-	return  &AuthRepositoryGRPCClient{
+	return &AuthRepositoryGRPCClient{
 		conn: conn,
 	}
 }
 
-func (c  AuthRepositoryGRPCClient) Authenticate(username, password string) (bool, string, string, error) {
+func (c AuthRepositoryGRPCClient) Authenticate(username, password string) (bool, string, string, error) {
 	client := users.NewUserServiceClient(c.conn)
 	req := &users.AuthenticateRequest{
 		Username: username,

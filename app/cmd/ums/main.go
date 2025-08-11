@@ -41,7 +41,7 @@ func main() {
 
 	err := grpcSrv.Run()
 	if err != nil {
-		fmt.Println("grpcSrv.Run() err: %v", err)
+		fmt.Printf("grpcSrv.Run() err: %v\n", err)
 	}
 
 	// router
