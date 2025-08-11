@@ -4,14 +4,26 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="833c0e98-5756-4acf-9358-238df7ba8bc3" name="Changes" comment="fixes and improvements 2">
+    <list default="true" id="833c0e98-5756-4acf-9358-238df7ba8bc3" name="Changes" comment="code problems fixed">
+      <change afterPath="$PROJECT_DIR$/app/internal/handlers/spacecraftHandler_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/repository/authRepositoryLocal_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/repository/spacecraftRespositoryMysql_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/repository/umsRepositoryLocal_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/internal/repository/spacecraftRespositoryMysql.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/repository/spacecraftRespositoryMysql.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/repository/spacecraftRespository copy.go-" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
   </component>
   <component name="GOROOT" url="file://$USER_HOME$/sdk/go1.24.6" />
   <component name="Git.Settings">
@@ -44,26 +56,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Docker.docker-compose.yml.app: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.GoLinterPluginOnboarding&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.GoLinterPluginStorageMigration&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/ppires/Projects/novo/ImperalFleet&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Docker.docker-compose.yml.app: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
+    "Go Test.TestSpacecraftRepositoryMysql_Create in app/internal/repository.executor": "Run",
+    "Go Test.TestSpacecraftRepositoryMysql_Delete in app/internal/repository.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.GoLinterPluginOnboarding": "true",
+    "RunOnceActivity.GoLinterPluginStorageMigration": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "git-widget-placeholder": "main",
+    "go.import.settings.migrated": "true",
+    "last_opened_file_path": "/Users/ppires/Projects/novo/ImperalFleet",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm"
   }
-}</component>
+}]]></component>
   <component name="QodanaHighlightedReportService">
     <option name="localRunNotPublishedPersistedInfo">
       <LocalReportPersistedInfo>
@@ -93,7 +107,31 @@
       <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output5/qodana.sarif.json" reportGuid="4c0eedef-a9af-49d7-b44d-dc30e2374295" reportId="ImperalFleet/qodana/2025-08-11" />
     </option>
   </component>
-  <component name="RunManager" selected="Docker.docker-compose.yml: Compose Deployment">
+  <component name="RunManager" selected="Go Test.TestSpacecraftRepositoryMysql_Delete in app/internal/repository">
+    <configuration name="TestSpacecraftRepositoryMysql_Create in app/internal/repository" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="ImperalFleet" />
+      <working_directory value="$PROJECT_DIR$/app/internal/repository" />
+      <root_directory value="$PROJECT_DIR$/app" />
+      <kind value="PACKAGE" />
+      <package value="app/internal/repository" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestSpacecraftRepositoryMysql_Create\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestSpacecraftRepositoryMysql_Delete in app/internal/repository" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="ImperalFleet" />
+      <working_directory value="$PROJECT_DIR$/app/internal/repository" />
+      <root_directory value="$PROJECT_DIR$/app" />
+      <kind value="PACKAGE" />
+      <package value="app/internal/repository" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestSpacecraftRepositoryMysql_Delete\E$" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
         <settings />
@@ -123,6 +161,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestSpacecraftRepositoryMysql_Delete in app/internal/repository" />
+        <item itemvalue="Go Test.TestSpacecraftRepositoryMysql_Create in app/internal/repository" />
         <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.app: Compose Deployment" />
       </list>
@@ -152,7 +192,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fixes and improvements" />
     <MESSAGE value="fixes and improvements 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixes and improvements 2" />
+    <MESSAGE value="code problems fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="code problems fixed" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

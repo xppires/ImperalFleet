@@ -12,8 +12,10 @@
 docker-compose up --build
 
 ### Run tests
-docker build -f Dockerfile.test -t app-test .
-docker run --rm  app-test
+### Run tests
+docker build -f Dockerfile.test -t imperalfleet-app-test .
+docker run --rm -e "APP_SECRET"="123456789012345678912345"  imperalfleet-app-test
+
 
 ## Routesd
 
