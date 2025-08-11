@@ -18,7 +18,6 @@ type Validator interface {
 	Valid() bool
 }
 
- 
 // ReadJSON is a generic helper function which unmarshalls a request and validates it according to the rules
 // set by T's Valid() method.
 func ReadJSON[T Validator](r *http.Request) (T, error) {
@@ -39,13 +38,14 @@ func ReadJSON[T Validator](r *http.Request) (T, error) {
 
 	return v, nil
 }
-func ReadJSONSimple(r *http.Request, v any) error {
-	if r.Body == nil {
-		return fmt.Errorf("missing request body")
-	}
 
-	return json.NewDecoder(r.Body).Decode(v)
-}
+//func ReadJSONSimple(r *http.Request, v any) error {
+//	if r.Body == nil {
+//		return fmt.Errorf("missing request body")
+//	}
+//
+//	return json.NewDecoder(r.Body).Decode(v)
+//}
 
 func WriteJSON(w http.ResponseWriter, status int, v any) error {
 	w.Header().Add("Content-Type", "application/json")
@@ -53,7 +53,9 @@ func WriteJSON(w http.ResponseWriter, status int, v any) error {
 	return json.NewEncoder(w).Encode(v)
 }
 
-func WriteError(w http.ResponseWriter, status int, err error) {
-	WriteJSON(w, status, map[string]string{"error": err.Error()})
-}
-
+//func WriteError(w http.ResponseWriter, status int, err error) {
+//	err = WriteJSON(w, status, map[string]string{"error": err.Error()})
+//	if err != nil {
+//		panic(err)
+//	}
+//}

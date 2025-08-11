@@ -1,10 +1,11 @@
 package repository
 
 import (
-	"app/internal/models"
 	"app/internal/common"
 	pb "app/internal/genproto/users"
+	"app/internal/models"
 	"context"
+	"fmt"
 )
 
 var UsersLocal = []models.User{
@@ -15,26 +16,28 @@ var UsersLocal = []models.User{
 	{UID: "MG1", Username: "morpheus", Password: "$2a$12$cHVLmITk0X1sNi7nkTfwd.IxlmEeMnliBSAMM0eUIVBE.B4hh2a52", Email: "", Role: "Manager"},
 }
 
-type umsRepositoryLocal struct {
+type UmsRepositoryLocal struct {
 	users []models.User
 }
 
-func NewUmsRepositoryLocal() *umsRepositoryLocal {
-	return &umsRepositoryLocal{users: UsersLocal}
+func NewUmsRepositoryLocal() *UmsRepositoryLocal {
+	return &UmsRepositoryLocal{users: UsersLocal}
 }
-func (a *umsRepositoryLocal) Authenticate(ctx context.Context, authRequest *pb.AuthenticateRequest) (*pb.AuthenticateResponse, error) {
+
+func (a *UmsRepositoryLocal) Authenticate(ctx context.Context, authRequest *pb.AuthenticateRequest) (*pb.AuthenticateResponse, error) {
 	for _, user := range a.users {
-		if user.Username == authRequest.Username && common.CheckPasswordHash( user.Password, authRequest.Password) {
+		if user.Username == authRequest.Username && common.CheckPasswordHash(authRequest.Password, user.Password) {
+			fmt.Println(user.UID, user.Username, user.Password, user.Role)
 			return &pb.AuthenticateResponse{
 				UID:  user.UID,
 				Role: user.Role,
 			}, nil
 		}
 	}
-	return nil, nil // or return an error if preferred
+	return nil, fmt.Errorf("incorrect credantials") // or return an error if preferred
 }
 
-func  (a *umsRepositoryLocal) GetUsers(ctx context.Context, userRequest *pb.GetUsersRequest) (*pb.GetUsersResponse, error) {
+func (a *UmsRepositoryLocal) GetUsers(ctx context.Context, userRequest *pb.GetUsersRequest) (*pb.GetUsersResponse, error) {
 
 	var pbUsers []*pb.User
 	for _, user := range a.users {
@@ -51,7 +54,7 @@ func  (a *umsRepositoryLocal) GetUsers(ctx context.Context, userRequest *pb.GetU
 	}, nil
 }
 
-func  (a *umsRepositoryLocal) GetUserById(ctx context.Context, userRequest *pb.GetUserByIdRequest) (*pb.GetUserByIdResponse, error) {
+func (a *UmsRepositoryLocal) GetUserById(ctx context.Context, userRequest *pb.GetUserByIdRequest) (*pb.GetUserByIdResponse, error) {
 	for _, user := range a.users {
 		if user.UID == userRequest.UID {
 			return &pb.GetUserByIdResponse{

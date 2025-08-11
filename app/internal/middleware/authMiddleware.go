@@ -5,31 +5,31 @@ import (
 	"app/internal/common"
 	"context"
 	"net/http"
-)	
+)
 
-type authenticateMiddleware struct{
+type AuthenticateMiddleware struct {
 	appConfig *config.ConfigApp
 }
 
-func NewAutenticateMiddleware( appConfig *config.ConfigApp) *authenticateMiddleware {
-	return &authenticateMiddleware{ appConfig: appConfig}
+func NewAutenticateMiddleware(appConfig *config.ConfigApp) *AuthenticateMiddleware {
+	return &AuthenticateMiddleware{appConfig: appConfig}
 }
-// authMiddleware is a middleware that checks for the JWT token in the Authorization header
+
+// AuthMiddleware authMiddleware is a middleware that checks for the JWT token in the Authorization header
 // It verifies the token and extracts userId and role from the claims.
-func (m *authenticateMiddleware) AuthMiddleware(next http.Handler) http.Handler {
+func (m *AuthenticateMiddleware) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		name,role, err := common.ExtractUserFromJWT(m.appConfig.JWT.Key ,w,r)
+		name, role, err := common.ExtractUserFromJWT(m.appConfig.JWT.Key, r)
 		if err != nil {
 			common.HandleErrorSimple(w, err, http.StatusUnauthorized)
 			return
 		}
-		
+
 		ctx := r.Context()
-		ctx = context.WithValue(ctx,"userId", name)
-		ctx = context.WithValue(ctx,"Role", role)
+		ctx = context.WithValue(ctx, "userId", name)
+		ctx = context.WithValue(ctx, "Role", role)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
-

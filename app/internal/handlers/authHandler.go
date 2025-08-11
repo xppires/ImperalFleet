@@ -2,66 +2,72 @@ package handlers
 
 import (
 	"app/config"
-    "app/internal/common"
-	"app/internal/services"
+	"app/internal/common"
 	"app/internal/models"
-	"net/http" 
-    "github.com/gorilla/mux"
+	"app/internal/services"
+	"encoding/json"
+	"github.com/gorilla/mux"
 	"log"
-	"encoding/json" 
+	"net/http"
 )
 
 type AuthHandler struct {
 	authService *services.AuthService
-	appConfig *config.ConfigApp
+	appConfig   *config.ConfigApp
 }
+
 func NewAuthHandler(authService *services.AuthService, appConfig *config.ConfigApp) *AuthHandler {
 	return &AuthHandler{
 		authService: authService,
-		appConfig: appConfig,
+		appConfig:   appConfig,
 	}
 }
 
-func (a *AuthHandler) RegisteRoutes(router *mux.Router){
+func (a *AuthHandler) RegisteRoutes(router *mux.Router) {
 
-	router.HandleFunc("/authenticate", a.Authenticate).Methods(http.MethodPost) 
+	router.HandleFunc("/authenticate", a.Authenticate).Methods(http.MethodPost)
 
 }
-// authenticate handles the user authentication.
+
+// Authenticate handles the user authentication.
 // It expects a JSON body with username and password.
 // If the credentials are valid, it generates a JWT token and returns it in the response.
 // If the credentials are invalid, it returns an unauthorized status.
 func (a *AuthHandler) Authenticate(w http.ResponseWriter, r *http.Request) {
-	
+
 	var user models.User
-	 if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-        http.Error(w, "Invalid user input", http.StatusBadRequest)
-        return
-    }
-    
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		http.Error(w, "Invalid user input", http.StatusBadRequest)
+		return
+	}
+
 	log.Println("authenticate called with method:", r.Method, "and :", user)
-	 
+
 	if len(user.Username) == 0 || len(user.Password) == 0 {
 		common.HandleErrorMsg(w, "Please provide username and password to obtain the token", http.StatusBadRequest)
 		return
 	}
 
-	// if ok, userId,role, _ := user.Authenticate(); ok { 
-	if ok, userId,role, _ := a.authService.Authenticate(user.Username,user.Password); ok { 	
-	// if (user.Username == "neo" && user.Password == "keanu") || (user.Username == "morpheus" && user.Password == "lawrence") {
-		token, err := common.GetToken(a.appConfig.JWT.Key , userId, role)
+	// if ok, userId, role, _:= user.Authenticate(); ok {
+	if ok, userId, role, err := a.authService.Authenticate(user.Username, user.Password); ok {
+		// if (user.Username == "neo" && user.Password == "keanu") || (user.Username == "morpheus" && user.Password == "lawrence") {
+		if err != nil {
+			common.HandleErrorMsg(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		token, err := common.GetToken(a.appConfig.JWT.Key, userId, role)
 		if err != nil {
 			common.HandleErrorSimple(w, err, http.StatusInternalServerError)
 		} else {
-			w.Header().Add("Authorization", "Bearer "+token)
-			w.Header().Add("Content-Type", "application/json")
-			w.WriteHeader(http.StatusOK)
-			json.NewEncoder(w).Encode(map[string]interface{}{
+			w.Header().Add("Authorization", "Bearer "+token+userId+role)
+			err := common.WriteJSON(w, http.StatusOK, map[string]interface{}{
 				"code":   200,
 				"userId": userId,
-				"token":   token,
-				}) 
-			
+				"token":  token,
+			})
+			if err != nil {
+				common.HandleErrorSimple(w, err, http.StatusInternalServerError)
+			}
 		}
 		return
 	} else {
@@ -69,4 +75,3 @@ func (a *AuthHandler) Authenticate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-

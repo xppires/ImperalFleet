@@ -1,35 +1,154 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="833c0e98-5756-4acf-9358-238df7ba8bc3" name="Changes" comment="" />
+    <list default="true" id="833c0e98-5756-4acf-9358-238df7ba8bc3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/ImperalFleet.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ImperalFleet.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/app/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/DockerfileAuth" beforeDir="false" afterPath="$PROJECT_DIR$/app/DockerfileAuth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/DockerfileUms" beforeDir="false" afterPath="$PROJECT_DIR$/app/DockerfileUms" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/cmd/api/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/cmd/api/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/cmd/ums/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/cmd/ums/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/config/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/database.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/app/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/common/envHelper.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/common/envHelper.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/common/errorHelper.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/common/errorHelper.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/common/json.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/common/json.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/common/jwtutil.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/common/jwtutil.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/common/utils.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/gRPCServer/umsServer.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/gRPCServer/umsServer.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/handlers/authHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/handlers/authHandler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/handlers/spacecraftHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/handlers/spacecraftHandler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/handlers/umsHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/handlers/umsHandler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/middleware/authMiddleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/middleware/authMiddleware.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/repository/authRepositoryLocal.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/repository/authRepositoryLocal.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/repository/spacecraftRespositoryMysql.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/repository/spacecraftRespositoryMysql.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/repository/spacecraftRespositoryPostgresql.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/repository/spacecraftRespositoryPostgresql.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/repository/umsRepositoryLocal.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/repository/umsRepositoryLocal.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/services/spacecraftService.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/services/spacecraftService.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="GOROOT" url="file://$USER_HOME$/sdk/go1.24.6" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;xppires&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/xppires/ImperalFleet.git&quot;,
+    &quot;accountId&quot;: &quot;99fd84be-b2da-447b-9a35-b6cc20725332&quot;
+  }
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="30V6Meak8zBkIdj70miatMNqraP" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.GoLinterPluginOnboarding": "true",
-    "RunOnceActivity.GoLinterPluginStorageMigration": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "last_opened_file_path": "/Users/ppires/Projects/novo/ImperalFleet",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.docker-compose.yml.app: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.GoLinterPluginOnboarding&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.GoLinterPluginStorageMigration&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/ppires/Projects/novo/ImperalFleet&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
-}]]></component>
+}</component>
+  <component name="QodanaHighlightedReportService">
+    <option name="localRunNotPublishedPersistedInfo">
+      <LocalReportPersistedInfo>
+        <option name="path" value="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output7/qodana.sarif.json" />
+        <option name="reportGuid" value="2e6ace6e-ad83-4500-9acd-3c21e8fd0fa9" />
+        <option name="reportName" value="ImperalFleet/qodana/2025-08-11" />
+      </LocalReportPersistedInfo>
+    </option>
+  </component>
+  <component name="QodanaIsSelectedPersistenceService">
+    <option name="selectedOrLoading" value="true" />
+  </component>
+  <component name="QodanaReportsService">
+    <option name="descriptions">
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output1/qodana.sarif.json" reportGuid="ae4cd8e4-e6ef-4ca0-a337-be727b8889b8" reportId="ImperalFleet/qodana/2025-08-11" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output2/qodana.sarif.json" reportGuid="5f20a1a2-3ccb-4ec7-abad-0bdc08402f80" reportId="ImperalFleet/qodana/2025-08-11" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output7/qodana.sarif.json" reportGuid="2e6ace6e-ad83-4500-9acd-3c21e8fd0fa9" reportId="ImperalFleet/qodana/2025-08-11" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output6/qodana.sarif.json" reportGuid="7f5fe731-6f13-4c4b-8fd7-a4e1db2614ef" reportId="ImperalFleet/qodana/2025-08-11" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output/qodana.sarif.json" reportGuid="08dcfd6b-c3b4-40b4-988f-328783ba2774" reportId="ImperalFleet/qodana/2025-08-10" />
+      <ReportDescription localRun="true" path="/private/var/folders/hl/39bvw09x08s6wcsqb0lj0k000000gn/T/qodana_output10/qodana.sarif.json" reportGuid="c0bc0946-a145-434e-ba92-a6064293cd00" reportId="ImperalFleet/qodana/2025-08-11" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Docker.docker-compose.yml: Compose Deployment">
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.app: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="app" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.app: Compose Deployment" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-gosdk-3b128438d3f6-07d2d2d66b1e-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-251.26927.50" />
-        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-GO-251.26927.50" />
+        <option value="bundled-gosdk-3b128438d3f6-07d2d2d66b1e-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-251.27812.54" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-GO-251.27812.54" />
       </set>
     </attachedChunks>
   </component>
@@ -48,5 +167,16 @@
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/app/cmd/api/main.go</url>
+          <line>3</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

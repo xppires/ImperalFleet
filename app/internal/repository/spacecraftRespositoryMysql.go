@@ -1,17 +1,14 @@
 package repository
 
-import ( 
-	"app/internal/models"
+import (
 	"app/internal/interfaces"
+	"app/internal/models"
 	"context"
-	"fmt" 
-	"log"
-	
+	"fmt"
 )
 
-
 type SpacecraftRepositoryMysql struct {
-	conn  interfaces.DBStore
+	conn interfaces.DBStore
 }
 
 func NewSpacecraftRepositoryMysql(conn interfaces.DBStore) *SpacecraftRepositoryMysql {
@@ -21,7 +18,7 @@ func NewSpacecraftRepositoryMysql(conn interfaces.DBStore) *SpacecraftRepository
 }
 
 // Create an entry for a new spaceship.
-func (r *SpacecraftRepositoryMysql) Create( ctx context.Context, craft *models.SpacecraftRequest) (int64, error) {
+func (r *SpacecraftRepositoryMysql) Create(ctx context.Context, craft *models.SpacecraftRequest) (int64, error) {
 	qSpaceship := `INSERT INTO spaceships (name, class, status, image, crew, value) VALUES (?, ?, ?, ?, ?, ?)`
 	qArmaments := `INSERT INTO armaments (spaceship_id,title, qty) VALUES (?, ?, ?)`
 
@@ -40,7 +37,7 @@ func (r *SpacecraftRepositoryMysql) Create( ctx context.Context, craft *models.S
 		tx.Rollback()
 		return 0, fmt.Errorf("spacecraft_repo: insert spacecraft: %w", err)
 	}
-	lastID,_ := result.LastInsertId()   
+	lastID, _ := result.LastInsertId()
 
 	for _, armament := range craft.Armament {
 		_, err := insertArmament.ExecContext(ctx, lastID, armament.Title, armament.Quantity)
@@ -49,14 +46,25 @@ func (r *SpacecraftRepositoryMysql) Create( ctx context.Context, craft *models.S
 			return 0, fmt.Errorf("spacecraft_repo: insert armament: %w", err)
 		}
 	}
-	tx.Commit()
-	return lastID,nil
-}
 
-func (r *SpacecraftRepositoryMysql) Update( ctx context.Context, id string, craft *models.SpacecraftRequest) error {
- q := "UPDATE spaceships SET name = ?, class = ?, status = ?, image = ?, crew = ?, value = ? WHERE id = ?"
- log.Println("Id: "+id)
-	res, err := r.conn.ExecContext(ctx, q, craft.Name, craft.Class, craft.Status, craft.Image, craft.Crew, craft.Value, id)
+	if tx.Commit() != nil {
+		tx.Rollback()
+		return 0, fmt.Errorf("spacecraft_repo: insert armament: %w", err)
+	}
+	return lastID, nil
+}
+func (r *SpacecraftRepositoryMysql) Update(ctx context.Context, id string, craft *models.SpacecraftRequest) error {
+	tx, err := r.conn.BeginTx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("spacecraft_repo: begin tx: %w", err)
+	}
+
+	q := "UPDATE spaceships SET name = ?, class = ?, status = ?, image = ?, crew = ?, value = ? WHERE id = ?"
+	updateQuery, err := tx.Prepare(q)
+	if err != nil {
+		return fmt.Errorf("spacecraft_repo: prepare stmt: %w", err)
+	}
+	res, err := updateQuery.ExecContext(ctx, craft.Name, craft.Class, craft.Status, craft.Image, craft.Crew, craft.Value, id)
 	if err != nil {
 		return fmt.Errorf("spacecraft_repo: update spacecraft: %w", err)
 	}
@@ -64,12 +72,26 @@ func (r *SpacecraftRepositoryMysql) Update( ctx context.Context, id string, craf
 	if rAff == 0 {
 		return errNotFound
 	}
+
+	if tx.Commit() != nil {
+		tx.Rollback()
+		return fmt.Errorf("spacecraft_repo: insert armament: %w", err)
+	}
 	return nil
 }
-func (r *SpacecraftRepositoryMysql) Delete( ctx context.Context, id int) error {
-	q := "DELETE FROM spaceships WHERE id = ?"
+func (r *SpacecraftRepositoryMysql) Delete(ctx context.Context, id int) error {
+	tx, err := r.conn.BeginTx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("spacecraft_repo: begin tx: %w", err)
+	}
 
-	res, err := r.conn.ExecContext(ctx, q, id)
+	q := "DELETE FROM spaceships WHERE id = ?"
+	deleteQuery, err := tx.Prepare(q)
+	if err != nil {
+		return fmt.Errorf("spacecraft_repo: prepare stmt: %w", err)
+	}
+
+	res, err := deleteQuery.ExecContext(ctx, id)
 	if err != nil {
 		return fmt.Errorf("spacecraft_repo: delete spacecraft: %w", err)
 	}
@@ -77,10 +99,15 @@ func (r *SpacecraftRepositoryMysql) Delete( ctx context.Context, id int) error {
 	if rAff == 0 {
 		return errNotFound
 	}
+
+	if tx.Commit() != nil {
+		tx.Rollback()
+		return fmt.Errorf("spacecraft_repo: insert armament: %w", err)
+	}
 	return nil
 }
 
-func (r *SpacecraftRepositoryMysql) GetByID(ctx context.Context, id int,filter *string) (models.Spacecraft, error) {
+func (r *SpacecraftRepositoryMysql) GetByID(ctx context.Context, id int, filter *string) (models.Spacecraft, error) {
 	qSpaceship := "SELECT id, name, class, status, image, crew, value FROM spaceships WHERE id = ?"
 	qArmaments := "SELECT id, spaceship_id, title, qty FROM armaments WHERE spaceship_id = ? "
 
@@ -116,7 +143,7 @@ func (r *SpacecraftRepositoryMysql) GetByID(ctx context.Context, id int,filter *
 	return craft, nil
 }
 
-func (r *SpacecraftRepositoryMysql) Get( ctx context.Context,filters *map[string][]string) ([]models.Spacecraft, error) {
+func (r *SpacecraftRepositoryMysql) Get(ctx context.Context, filters *map[string][]string) ([]models.Spacecraft, error) {
 	// list := []models.Spacecraft{}
 	// return list, fmt.Errorf("not implemented")
 
@@ -154,7 +181,7 @@ func (r *SpacecraftRepositoryMysql) Get( ctx context.Context,filters *map[string
 	}
 	defer rows.Close()
 
-	spaceshipsMap := make(map[int]*models.Spacecraft,0)
+	spaceshipsMap := make(map[int]*models.Spacecraft, 0)
 	for rows.Next() {
 		var spacecraft models.Spacecraft
 		if err := rows.Scan(&spacecraft.ID, &spacecraft.Name, &spacecraft.Class, &spacecraft.Status, &spacecraft.Image, &spacecraft.Crew, &spacecraft.Value); err != nil {
@@ -162,16 +189,15 @@ func (r *SpacecraftRepositoryMysql) Get( ctx context.Context,filters *map[string
 			return nil, fmt.Errorf("spacecraft_repo: retrieve spacecrafts: %w", err)
 		}
 		spaceshipsMap[len(spaceshipsMap)] = &spacecraft
-		
-	} 
+
+	}
 	for craftIdx, spacecraft := range spaceshipsMap {
-		armaments := make([]models.Armament, 0) 
+		armaments := make([]models.Armament, 0)
 		armRows, err := selectArmaments.Query(spacecraft.ID)
 		if err != nil {
 			tx.Rollback()
 			return nil, fmt.Errorf("spacecraft_repo: retrieve armaments: %w", err)
 		}
-		defer armRows.Close()
 
 		for armRows.Next() {
 			var armament models.Armament
@@ -180,13 +206,14 @@ func (r *SpacecraftRepositoryMysql) Get( ctx context.Context,filters *map[string
 			}
 			armaments = append(armaments, armament)
 			spaceshipsMap[craftIdx].Armament = append(spaceshipsMap[craftIdx].Armament, armament)
-		} 
-		clear(armaments) 
-		
-	} 
+		}
+		clear(armaments)
+
+	}
+	defer selectArmaments.Close()
 	returnedSpacecrafts := make([]models.Spacecraft, 0, len(spaceshipsMap))
 	for _, spacecraft := range spaceshipsMap {
 		returnedSpacecrafts = append(returnedSpacecrafts, *spacecraft)
-	}	
-	return returnedSpacecrafts, nil 
+	}
+	return returnedSpacecrafts, nil
 }

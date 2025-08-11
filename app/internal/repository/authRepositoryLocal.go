@@ -12,14 +12,14 @@ var Users = []models.User{
 	{UID: "MG1", Username: "morpheus", Password: "lawrence", Email: "", Role: "Manager"},
 }
 
-type authRepositoryLocal struct {
+type AuthRepositoryLocal struct {
 	users []models.User
 }
 
-func NewAuthRepositoryLocal() *authRepositoryLocal {
-	return &authRepositoryLocal{users: Users}
+func NewAuthRepositoryLocal() *AuthRepositoryLocal {
+	return &AuthRepositoryLocal{users: Users}
 }
-func (a *authRepositoryLocal) Authenticate(username, password string) (bool, string, string, error) {
+func (a *AuthRepositoryLocal) Authenticate(username, password string) (bool, string, string, error) {
 	for _, user := range a.users {
 		if user.Username == username && user.Password == password {
 			return true, user.UID, user.Role, nil

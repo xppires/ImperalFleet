@@ -1,4 +1,4 @@
-FROM golang:1.23-alpine
+FROM golang:1.23-alpine AS baseapp
 
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
@@ -14,6 +14,8 @@ RUN go get github.com/gorilla/mux
 COPY . .
 
 RUN go mod tidy
+
+FROM  baseapp
 RUN go build  -mod=mod -o main ./cmd/api/main.go
 
 

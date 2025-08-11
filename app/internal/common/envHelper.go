@@ -1,4 +1,3 @@
-
 package common
 
 import (
@@ -6,7 +5,7 @@ import (
 	"strconv"
 )
 
-// Helper functions for environment variables
+// GetEnvOrDefault Helper functions for environment variables
 func GetEnvOrDefault(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
 		return value

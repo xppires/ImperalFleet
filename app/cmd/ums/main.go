@@ -1,45 +1,49 @@
 package main
-import ( 
-    "app/config" 
-    "app/internal/services" 
-    "app/internal/repository"
-    "app/internal/handlers"   
-    // "app/internal/router"
-    "app/internal/gRPCServer"
+
+import (
+	"app/config"
+	"app/internal/handlers"
+	"app/internal/repository"
+	"app/internal/services"
+	"fmt"
+
+	// "app/internal/router"
+	"app/internal/gRPCServer"
 )
 
-
 func main() {
-    
-    appConfig, _ := config.LoadConfig()
 
-    config.InitLogger()
-    // db, config := config.InitDB()
+	appConfig, _ := config.LoadConfig()
+
+	config.InitLogger()
+	// db, config := config.InitDB()
 	// _ := config.InitDB(appConfig)
-    // rt := config.InitGlobalLimitRate()
+	// rt := config.InitGlobalLimitRate()
 
-    // repositories
-    var umsRepo repository.UmsRepository
-    switch appConfig.Database.Driver {
-    case "postgres":
-        // umsRepo = repository.NewUmsRepositoryPosrtgresql(db)
-    case "mysql":
-        // umsRepo = repository.NewUmsRepositoryMysql(db) 
+	// repositories
+	var umsRepo repository.UmsRepository
+	switch appConfig.Database.Driver {
+	case "postgres":
+		// umsRepo = repository.NewUmsRepositoryPosrtgresql(db)
+	case "mysql":
+		// umsRepo = repository.NewUmsRepositoryMysql(db)
 	case "local":
 		umsRepo = repository.NewUmsRepositoryLocal()
-	
-    }
 
-    // services
-    umsService := services.NewUmsService(umsRepo)
-    
-    grpcSrv := gRPCServer.NewUmsGRPCServer(appConfig.Server.GrpcAddr )
-    // handlers 
-    handlers.NewGrpcUmsHandler(grpcSrv.GrpcServer,umsService)
+	}
 
-	grpcSrv.Run()
+	// services
+	umsService := services.NewUmsService(umsRepo)
 
+	grpcSrv := gRPCServer.NewUmsGRPCServer(appConfig.Server.GrpcAddr)
+	// handlers
+	handlers.NewGrpcUmsHandler(grpcSrv.GrpcServer, umsService)
 
-    // router
-    // router.InitUmsRouter(umsHandlers, rt, lg)
+	err := grpcSrv.Run()
+	if err != nil {
+		fmt.Println("grpcSrv.Run() err: %v", err)
+	}
+
+	// router
+	// router.InitUmsRouter(umsHandlers, rt, lg)
 }
